@@ -44,10 +44,11 @@ partial class RankForm
         // 
         // cmbCategory
         // 
+        cmbCategory.DisplayMember = "Text";
         cmbCategory.FormattingEnabled = true;
-        cmbCategory.Items.AddRange(new object[] { resources.GetString("cmbCategory.Items"), resources.GetString("cmbCategory.Items1"), resources.GetString("cmbCategory.Items2") });
         resources.ApplyResources(cmbCategory, "cmbCategory");
         cmbCategory.Name = "cmbCategory";
+        cmbCategory.ValueMember = "Id";
         // 
         // lbRankResults
         // 

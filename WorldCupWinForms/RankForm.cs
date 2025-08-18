@@ -8,16 +8,19 @@ using System.Drawing;
 using System.Drawing.Printing;
 using System.Globalization;
 using System.Linq;
+using System.Resources;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WorldCupWinForms.Model;
 
 namespace WorldCupWinForms;
+
 public partial class RankForm : Form
 {
     private readonly State state;
     private readonly IMatchDataRepo matchDataDataRepo;
+
     public RankForm(State state)
     {
         if (state.SelectedLanguage == Language.Croatian)
@@ -30,6 +33,11 @@ public partial class RankForm : Form
         }
 
         InitializeComponent();
+
+        var resourcemanager = new ResourceManager($"{typeof(RankForm).FullName}", typeof(RankForm).Assembly);
+        var comboItems = ComboRankingItems.GetItemsForLanguage(resourcemanager);
+        cmbCategory.DataSource = comboItems;
+
         this.state = state;
         matchDataDataRepo = new LocalMatchDataRepo();
     }
@@ -44,7 +52,7 @@ public partial class RankForm : Form
     {
         ExportRankingsToPDF(lbRankResults);
     }
-    
+
     private async void DisplayRankingsAsync(string? selected)
     {
         lbRankResults.Items.Clear();
@@ -60,7 +68,7 @@ public partial class RankForm : Form
             {
                 var allMatches = await matchDataDataRepo.GetMatchesAsync(state.SelectedGender);
                 var playerGoals = new Dictionary<string, int>();
-                
+
                 foreach (var match in allMatches)
                 {
                     // home check
@@ -75,13 +83,13 @@ public partial class RankForm : Form
                         CountGoalsFromEvents(match.AwayTeamEvents, playerGoals);
                     }
                 }
-                
+
                 var sortedPlayers = playerGoals.OrderByDescending(p => p.Value).ToList();
                 if (sortedPlayers.Any())
                 {
                     lbRankResults.Items.Add($"Goals ranking for {state.SelectedFifaCode}:");
                     lbRankResults.Items.Add("".PadRight(40, '-'));
-                    
+
                     for (int i = 0; i < sortedPlayers.Count; i++)
                     {
                         var player = sortedPlayers[i];
@@ -97,17 +105,18 @@ public partial class RankForm : Form
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading goals data: {ex.Message}", "Error", 
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error loading goals data: {ex.Message}", "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        else if (selected == "Players by most yellow cards") {
+        else if (selected == "Players by most yellow cards")
+        {
             try
             {
                 var allMatches = await matchDataDataRepo.GetMatchesAsync(state.SelectedGender);
                 var playerYellowCards = new Dictionary<string, int>();
-                
+
                 foreach (var match in allMatches)
                 {
                     // home check
@@ -122,13 +131,13 @@ public partial class RankForm : Form
                         CountYellowCardsFromEvents(match.AwayTeamEvents, playerYellowCards);
                     }
                 }
-                
+
                 var sortedPlayers = playerYellowCards.OrderByDescending(p => p.Value).ToList();
                 if (sortedPlayers.Any())
                 {
                     lbRankResults.Items.Add($"Yellow cards ranking for {state.SelectedFifaCode}:");
                     lbRankResults.Items.Add("".PadRight(40, '-'));
-                    
+
                     for (int i = 0; i < sortedPlayers.Count; i++)
                     {
                         var player = sortedPlayers[i];
@@ -144,8 +153,8 @@ public partial class RankForm : Form
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading yellow cards data: {ex.Message}", "Error", 
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error loading yellow cards data: {ex.Message}", "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -154,19 +163,19 @@ public partial class RankForm : Form
             try
             {
                 var allMatches = await matchDataDataRepo.GetMatchesAsync(state.SelectedGender);
-                
+
                 // Filter po timu (home/away)
-                var teamMatches = allMatches.Where(match => 
-                    (match.HomeTeam?.Code?.Equals(state.SelectedFifaCode, StringComparison.OrdinalIgnoreCase) == true) ||
-                    (match.AwayTeam?.Code?.Equals(state.SelectedFifaCode, StringComparison.OrdinalIgnoreCase) == true))
-                    .ToList();
-                
+                var teamMatches = allMatches.Where(match =>
+                                                       (match.HomeTeam?.Code?.Equals(state.SelectedFifaCode, StringComparison.OrdinalIgnoreCase) == true) ||
+                                                       (match.AwayTeam?.Code?.Equals(state.SelectedFifaCode, StringComparison.OrdinalIgnoreCase) == true))
+                                            .ToList();
+
                 if (teamMatches.Any())
                 {
                     var sortedMatches = teamMatches.OrderByDescending(m => m.Attendance).ToList();
-                    
+
                     lbRankResults.Items.Add($"Matches by attendance for {state.SelectedFifaCode}:");
-                    
+
                     for (int i = 0; i < sortedMatches.Count; i++)
                     {
                         var match = sortedMatches[i];
@@ -175,7 +184,7 @@ public partial class RankForm : Form
                         var awayTeam = match.AwayTeam?.Country ?? "Unknown";
                         var venue = !string.IsNullOrEmpty(match.Venue) ? match.Venue : "Unknown Venue";
                         var attendanceText = match.Attendance.ToString("N0");
-                        
+
                         lbRankResults.Items.Add($"{rank}. {homeTeam} vs {awayTeam}");
                         lbRankResults.Items.Add($"    Venue: {venue}");
                         lbRankResults.Items.Add($"    Attendance: {attendanceText}");
@@ -189,8 +198,8 @@ public partial class RankForm : Form
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading attendance data: {ex.Message}", "Error", 
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error loading attendance data: {ex.Message}", "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         else
@@ -199,17 +208,20 @@ public partial class RankForm : Form
             MessageBox.Show("Invalid selection.");
         }
     }
-    
+
     private void CountGoalsFromEvents(List<DAL.Models.TeamEvent> teamEvents, Dictionary<string, int> playerGoals)
     {
         if (teamEvents == null) return;
 
         //hvala resharper
-        foreach (var playerName in from teamEvent in teamEvents where teamEvent.TypeOfEvent == TypeOfEvent.Goal || 
-                                                                      teamEvent.TypeOfEvent == TypeOfEvent.GoalPenalty || 
-                                                                      teamEvent.TypeOfEvent == TypeOfEvent.GoalOwn 
-                                   select teamEvent.Player?.Trim() into playerName 
-                                   where !string.IsNullOrEmpty(playerName) select playerName)
+        foreach (var playerName in from teamEvent in teamEvents
+                                   where teamEvent.TypeOfEvent == TypeOfEvent.Goal ||
+                                         teamEvent.TypeOfEvent == TypeOfEvent.GoalPenalty ||
+                                         teamEvent.TypeOfEvent == TypeOfEvent.GoalOwn
+                                   select teamEvent.Player?.Trim()
+                                   into playerName
+                                   where !string.IsNullOrEmpty(playerName)
+                                   select playerName)
         {
             if (playerGoals.ContainsKey(playerName))
             {
@@ -227,9 +239,12 @@ public partial class RankForm : Form
         if (teamEvents == null) return;
 
         //hvala resharper 2
-        foreach (var playerName in from teamEvent in teamEvents where teamEvent.TypeOfEvent == TypeOfEvent.YellowCard 
-                                   select teamEvent.Player?.Trim() into playerName 
-                                   where !string.IsNullOrEmpty(playerName) select playerName)
+        foreach (var playerName in from teamEvent in teamEvents
+                                   where teamEvent.TypeOfEvent == TypeOfEvent.YellowCard
+                                   select teamEvent.Player?.Trim()
+                                   into playerName
+                                   where !string.IsNullOrEmpty(playerName)
+                                   select playerName)
         {
             if (playerYellowCards.ContainsKey(playerName))
             {
@@ -268,8 +283,8 @@ public partial class RankForm : Form
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Error exporting to PDF: {ex.Message}", "Export Error", 
-                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show($"Error exporting to PDF: {ex.Message}", "Export Error",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
@@ -283,7 +298,7 @@ public partial class RankForm : Form
             Font contentFont = new Font("Arial", 10, FontStyle.Regular);
             Brush blackBrush = Brushes.Black;
             Brush grayBrush = Brushes.Gray;
-            
+
             float yPosition = 50;
             float leftMargin = 50;
             float rightMargin = e.PageBounds.Width - 50;
@@ -309,8 +324,34 @@ public partial class RankForm : Form
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Error during printing: {ex.Message}", "Print Error", 
-                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show($"Error during printing: {ex.Message}", "Print Error",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
+}
+
+public class ComboRankingItems
+{
+    public RankType Id { get; set; }
+
+    public string Text { get; set; } = null!;
+
+    public static ComboRankingItems[] GetItemsForLanguage(ResourceManager resourceManager) =>
+    [
+        new ComboRankingItems { Id = RankType.Goals, Text = resourceManager.GetString("ComboRankItem_1")! },
+        new ComboRankingItems { Id = RankType.YellowCards, Text = resourceManager.GetString("ComboRankItem_2")! },
+        new ComboRankingItems { Id = RankType.Attendance, Text = resourceManager.GetString("ComboRankItem_3")! }
+    ];
+
+    private ComboRankingItems()
+    {
+        
+    }
+}
+
+public enum RankType
+{
+    Goals = 1,
+    YellowCards = 2,
+    Attendance = 3
 }

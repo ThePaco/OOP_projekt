@@ -120,13 +120,13 @@
   <data name="label1.Text" xml:space="preserve">
     <value>odaberi kategoriju</value>
   </data>
-  <data name="cmbCategory.Items" xml:space="preserve">
-    <value>po golovima</value>
+  <data name="ComboRankItem_1" xml:space="preserve">
+    <value>ovo je jedan</value>
   </data>
-  <data name="cmbCategory.Items1" xml:space="preserve">
-    <value>po kartonima</value>
+  <data name="ComboRankItem_3" xml:space="preserve">
+    <value>ovo je tri</value>
   </data>
-  <data name="cmbCategory.Items2" xml:space="preserve">
-    <value>najviše</value>
+  <data name="ComboRankItem_2" xml:space="preserve">
+    <value>ovo je dva</value>
   </data>
 </root>
