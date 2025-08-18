@@ -117,4 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="lblSelection.Text" xml:space="preserve">
+    <value>odaberi ekipu</value>
+  </data>
+  <data name="lblState.Text" xml:space="preserve">
+    <value>ovo je HR FOO</value>
+  </data>
 </root>

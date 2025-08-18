@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ using DAL.Models.Enums;
 using WorldCupWinForms.Model;
 
 namespace WorldCupWinForms;
+
 public partial class FavForm : Form
 {
     private readonly State state;
@@ -52,12 +54,12 @@ public partial class FavForm : Form
                 if (result != DialogResult.OK)
                 {
                     var defaultSettings = new UserSettings
-                    {
-                        Language = DAL.Models.Enums.Language.English,
-                        Gender = DAL.Models.Enums.Gender.Men,
-                        DataSource = DAL.Models.Enums.DataSource.Local,
-                        Resolution = Resolution.w1080_h1920
-                    };
+                                          {
+                                              Language = DAL.Models.Enums.Language.English,
+                                              Gender = DAL.Models.Enums.Gender.Men,
+                                              DataSource = DAL.Models.Enums.DataSource.Local,
+                                              Resolution = Resolution.w1080_h1920
+                                          };
                     ApplySettingsToState(defaultSettings);
                 }
 
@@ -99,12 +101,12 @@ public partial class FavForm : Form
         try
         {
             var userSettings = new UserSettings
-            {
-                Language = state.SelectedLanguage,
-                Gender = state.SelectedGender,
-                DataSource = state.SelectedSource,
-                Resolution = Resolution.w1080_h1920 // not needed in forms
-            };
+                               {
+                                   Language = state.SelectedLanguage,
+                                   Gender = state.SelectedGender,
+                                   DataSource = state.SelectedSource,
+                                   Resolution = Resolution.w1080_h1920 // not needed in forms
+                               };
 
             await settingsRepository.SaveUserSettingsAsync(userSettings);
         }
@@ -124,8 +126,31 @@ public partial class FavForm : Form
 
     private void UpdateStateLabel()
     {
-        lblState.Text = $@"Current: {state.SelectedLanguage.ToString()} - " +
-                        $@" {state.SelectedGender.ToString()}";
+        if (state.SelectedLanguage == Language.Croatian)
+        {
+            Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("hr-HR");
+            ApplyResourceToControl(this, new ComponentResourceManager(typeof(FavForm)), new CultureInfo("hr-HR"));
+        }
+        else
+        {
+            Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("en-US");
+            ApplyResourceToControl(this, new ComponentResourceManager(typeof(FavForm)), new CultureInfo("en-US"));
+        }
+
+        
+
+        //lblState.Text = $@"Current: {state.SelectedLanguage.ToString()} - " +
+        //                $@" {state.SelectedGender.ToString()}";
+    }
+
+    private void ApplyResourceToControl(Control control, ComponentResourceManager cmp, CultureInfo cultureInfo)
+    {
+        cmp.ApplyResources(control, control.Name, cultureInfo);
+
+        foreach (Control child in control.Controls)
+        {
+            ApplyResourceToControl(child, cmp, cultureInfo);
+        }
     }
 
     private async void LoadFavouritePlayersAsync()
@@ -186,22 +211,22 @@ public partial class FavForm : Form
             if (isPlayerSelected) displayText = "✓ " + displayText;
 
             Panel playerPanel = new Panel
-            {
-                Location = new Point(10, yPosition),
-                Size = new Size(280, playerHeight),
-                BackColor = isPlayerSelected ? Color.LightCyan : (panel == pnlFavPlayers ? Color.LightBlue : Color.LightGray),
-                BorderStyle = BorderStyle.FixedSingle,
-                Cursor = Cursors.Hand,
-                Tag = player // Store the player object for drag and drop
-            };
+                                {
+                                    Location = new Point(10, yPosition),
+                                    Size = new Size(280, playerHeight),
+                                    BackColor = isPlayerSelected ? Color.LightCyan : (panel == pnlFavPlayers ? Color.LightBlue : Color.LightGray),
+                                    BorderStyle = BorderStyle.FixedSingle,
+                                    Cursor = Cursors.Hand,
+                                    Tag = player // Store the player object for drag and drop
+                                };
 
             PictureBox playerImage = new PictureBox
-            {
-                Location = new Point(5, 5),
-                Size = new Size(imageSize, imageSize),
-                SizeMode = PictureBoxSizeMode.Zoom,
-                BorderStyle = BorderStyle.FixedSingle
-            };
+                                     {
+                                         Location = new Point(5, 5),
+                                         Size = new Size(imageSize, imageSize),
+                                         SizeMode = PictureBoxSizeMode.Zoom,
+                                         BorderStyle = BorderStyle.FixedSingle
+                                     };
 
             try
             {
@@ -215,14 +240,14 @@ public partial class FavForm : Form
             }
 
             Label playerLabel = new Label
-            {
-                Text = displayText,
-                Location = new Point(imageSize + 10, 5),
-                Size = new Size(215, playerHeight - 10),
-                Font = new Font("Arial", 9),
-                ForeColor = isPlayerSelected ? Color.Blue : (isPlayerInFavorites ? Color.OrangeRed : Color.Black),
-                TextAlign = ContentAlignment.MiddleLeft
-            };
+                                {
+                                    Text = displayText,
+                                    Location = new Point(imageSize + 10, 5),
+                                    Size = new Size(215, playerHeight - 10),
+                                    Font = new Font("Arial", 9),
+                                    ForeColor = isPlayerSelected ? Color.Blue : (isPlayerInFavorites ? Color.OrangeRed : Color.Black),
+                                    TextAlign = ContentAlignment.MiddleLeft
+                                };
 
             ContextMenuStrip contextMenu = CreatePlayerContextMenu(player, isPlayerInFavorites, panel == pnlFavPlayers);
 
@@ -320,7 +345,7 @@ public partial class FavForm : Form
                     await imagesRepository.UploadImageAsync(imageData, fileName);
 
                     MessageBox.Show($"Image successfully added for {player.Name}!", "Image Added",
-                                  MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     RefreshFavoritePlayersPanel();
                     RefreshTeamPlayersPanel();
@@ -330,7 +355,7 @@ public partial class FavForm : Form
         catch (Exception ex)
         {
             MessageBox.Show($"Error adding image for {player.Name}: {ex.Message}", "Error",
-                          MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
@@ -339,7 +364,7 @@ public partial class FavForm : Form
         try
         {
             var result = MessageBox.Show($"Remove image for {player.Name}?", "Confirm Image Removal",
-                                       MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                                         MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (result == DialogResult.Yes)
             {
@@ -362,7 +387,7 @@ public partial class FavForm : Form
                 }
 
                 MessageBox.Show($"Image removed for {player.Name}!", "Image Removed",
-                              MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 RefreshFavoritePlayersPanel();
                 RefreshTeamPlayersPanel();
@@ -371,14 +396,14 @@ public partial class FavForm : Form
         catch (Exception ex)
         {
             MessageBox.Show($"Error removing image for {player.Name}: {ex.Message}", "Error",
-                          MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
     private void PlayerPanel_Click(object sender, EventArgs e)
     {
         StartingEleven player = null;
-        
+
         if (sender is Panel panel && panel.Tag is StartingEleven)
         {
             player = (StartingEleven)panel.Tag;
@@ -409,11 +434,11 @@ public partial class FavForm : Form
         if (e.Button == MouseButtons.Right)
             return;
 
-        if (e.Button != MouseButtons.Left) 
+        if (e.Button != MouseButtons.Left)
             return;
 
         StartingEleven player = null;
-        
+
         if (sender is Panel panel && panel.Tag is StartingEleven)
         {
             player = (StartingEleven)panel.Tag;
@@ -430,7 +455,7 @@ public partial class FavForm : Form
             {
                 // Ensure the clicked player is in the selection
                 if (!selectedPlayers.Any(p => p.Name.Equals(player.Name, StringComparison.OrdinalIgnoreCase) &&
-                                             p.ShirtNumber == player.ShirtNumber))
+                                              p.ShirtNumber == player.ShirtNumber))
                 {
                     if (selectedPlayers.Count < 3)
                     {
@@ -494,7 +519,7 @@ public partial class FavForm : Form
         {
             // Check if player is already in favorites
             if (favoritePlayersList.Any(p => p.Name.Equals(player.Name, StringComparison.OrdinalIgnoreCase) &&
-                                           p.ShirtNumber == player.ShirtNumber))
+                                             p.ShirtNumber == player.ShirtNumber))
             {
                 duplicatePlayers.Add(player.Name);
                 continue;
@@ -517,12 +542,12 @@ public partial class FavForm : Form
             {
                 playersToAdd = playersToAdd.Take(remainingSlots).ToList();
                 MessageBox.Show($"Only {remainingSlots} slots remaining. Added first {remainingSlots} selected players.",
-                              "Favorites Limit", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                "Favorites Limit", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
                 MessageBox.Show("You already have the maximum of 3 favourite players!", "Maximum Reached",
-                              MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
         }
@@ -538,12 +563,13 @@ public partial class FavForm : Form
             {
                 message += $"\n\nSkipped duplicates: {string.Join(", ", duplicatePlayers)}";
             }
+
             MessageBox.Show(message, "Players Added", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         else if (duplicatePlayers.Count > 0)
         {
             MessageBox.Show($"All selected players are already in favorites: {string.Join(", ", duplicatePlayers)}",
-                          "Duplicate Players", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            "Duplicate Players", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         RefreshFavoritePlayersPanel();
@@ -556,7 +582,7 @@ public partial class FavForm : Form
         if (favoritePlayersList.Count >= 3) // Maximum 3 favourite players
         {
             MessageBox.Show("You can only have a maximum of 3 favourite players!", "Maximum Reached",
-                          MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;
         }
 
@@ -571,19 +597,19 @@ public partial class FavForm : Form
         else
         {
             MessageBox.Show($"{player.Name} is already in your favorites!", "Duplicate Player",
-                          MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 
     private void RemoveFromFavorites(StartingEleven player)
     {
         var result = MessageBox.Show($"Remove {player.Name} from favorites?", "Confirm Removal",
-                                   MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                                     MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
         if (result == DialogResult.Yes)
         {
             favoritePlayersList.RemoveAll(p => p.Name.Equals(player.Name, StringComparison.OrdinalIgnoreCase) &&
-                                             p.ShirtNumber == player.ShirtNumber);
+                                               p.ShirtNumber == player.ShirtNumber);
             RefreshFavoritePlayersPanel();
             RefreshTeamPlayersPanel();
             SaveFavouritePlayersAsync();
@@ -600,14 +626,14 @@ public partial class FavForm : Form
         {
             pnlFavPlayers.Controls.Clear();
             Label emptyLabel = new Label
-            {
-                Text = "Drag (or hold Ctrl) players here to add to favorites\n\n(Double-click favorite players to remove)\n\nMaximum: 3 players",
-                Location = new Point(10, 10),
-                Size = new Size(300, 100),
-                Font = new Font("Arial", 9),
-                ForeColor = Color.Gray,
-                TextAlign = ContentAlignment.MiddleCenter
-            };
+                               {
+                                   Text = "Drag (or hold Ctrl) players here to add to favorites\n\n(Double-click favorite players to remove)\n\nMaximum: 3 players",
+                                   Location = new Point(10, 10),
+                                   Size = new Size(300, 100),
+                                   Font = new Font("Arial", 9),
+                                   ForeColor = Color.Gray,
+                                   TextAlign = ContentAlignment.MiddleCenter
+                               };
             pnlFavPlayers.Controls.Add(emptyLabel);
         }
     }
@@ -669,13 +695,13 @@ public partial class FavForm : Form
             {
                 pnlTeamPlayers.Controls.Clear();
                 Label noPlayersLabel = new Label
-                {
-                    Text = "No player data available for this team",
-                    Location = new Point(10, 10),
-                    Size = new Size(280, 30),
-                    Font = new Font("Arial", 10),
-                    ForeColor = Color.Gray
-                };
+                                       {
+                                           Text = "No player data available for this team",
+                                           Location = new Point(10, 10),
+                                           Size = new Size(280, 30),
+                                           Font = new Font("Arial", 10),
+                                           ForeColor = Color.Gray
+                                       };
                 pnlTeamPlayers.Controls.Add(noPlayersLabel);
             }
         }
@@ -693,8 +719,7 @@ public partial class FavForm : Form
             await SaveCurrentSettingsAsync();
             SaveFavouritePlayersAsync();
 
-            var result = MessageBox.Show(
-                                         "Exit app?",
+            var result = MessageBox.Show("Exit app?",
                                          "Confirm Exit",
                                          MessageBoxButtons.YesNo,
                                          MessageBoxIcon.Question);
@@ -713,8 +738,7 @@ public partial class FavForm : Form
         await SaveCurrentSettingsAsync();
         SaveFavouritePlayersAsync();
 
-        var result = MessageBox.Show(
-                                     "Exit app?",
+        var result = MessageBox.Show("Exit app?",
                                      "Confirm Exit",
                                      MessageBoxButtons.YesNo,
                                      MessageBoxIcon.Question);

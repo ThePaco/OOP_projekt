@@ -28,6 +28,7 @@ partial class RankForm
     /// </summary>
     private void InitializeComponent()
     {
+        System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RankForm));
         label1 = new Label();
         cmbCategory = new ComboBox();
         lbRankResults = new ListBox();
@@ -38,65 +39,45 @@ partial class RankForm
         // 
         // label1
         // 
-        label1.AutoSize = true;
-        label1.Location = new Point(14, 15);
+        resources.ApplyResources(label1, "label1");
         label1.Name = "label1";
-        label1.Size = new Size(155, 15);
-        label1.TabIndex = 0;
-        label1.Text = "Choose category to rank by:";
         // 
         // cmbCategory
         // 
         cmbCategory.FormattingEnabled = true;
-        cmbCategory.Items.AddRange(new object[] { "Players by most goals", "Players by most yellow cards", "Matches by most attendance" });
-        cmbCategory.Location = new Point(175, 12);
+        cmbCategory.Items.AddRange(new object[] { resources.GetString("cmbCategory.Items"), resources.GetString("cmbCategory.Items1"), resources.GetString("cmbCategory.Items2") });
+        resources.ApplyResources(cmbCategory, "cmbCategory");
         cmbCategory.Name = "cmbCategory";
-        cmbCategory.Size = new Size(193, 23);
-        cmbCategory.TabIndex = 1;
         // 
         // lbRankResults
         // 
         lbRankResults.FormattingEnabled = true;
-        lbRankResults.ItemHeight = 15;
-        lbRankResults.Location = new Point(14, 47);
+        resources.ApplyResources(lbRankResults, "lbRankResults");
         lbRankResults.Name = "lbRankResults";
-        lbRankResults.Size = new Size(684, 289);
-        lbRankResults.TabIndex = 2;
         // 
         // btnRank
         // 
-        btnRank.Location = new Point(384, 12);
+        resources.ApplyResources(btnRank, "btnRank");
         btnRank.Name = "btnRank";
-        btnRank.Size = new Size(75, 23);
-        btnRank.TabIndex = 3;
-        btnRank.Text = "Rank!";
         btnRank.UseVisualStyleBackColor = true;
         btnRank.Click += btnRank_Click;
         // 
         // label2
         // 
-        label2.AutoSize = true;
-        label2.Location = new Point(590, 362);
+        resources.ApplyResources(label2, "label2");
         label2.Name = "label2";
-        label2.Size = new Size(108, 15);
-        label2.TabIndex = 4;
-        label2.Text = "Export data to PDF:";
         // 
         // btnPrint
         // 
-        btnPrint.Location = new Point(623, 380);
+        resources.ApplyResources(btnPrint, "btnPrint");
         btnPrint.Name = "btnPrint";
-        btnPrint.Size = new Size(75, 23);
-        btnPrint.TabIndex = 6;
-        btnPrint.Text = "Print";
         btnPrint.UseVisualStyleBackColor = true;
         btnPrint.Click += btnPrint_Click;
         // 
         // RankForm
         // 
-        AutoScaleDimensions = new SizeF(7F, 15F);
+        resources.ApplyResources(this, "$this");
         AutoScaleMode = AutoScaleMode.Font;
-        ClientSize = new Size(713, 450);
         Controls.Add(btnPrint);
         Controls.Add(label2);
         Controls.Add(btnRank);
@@ -104,7 +85,6 @@ partial class RankForm
         Controls.Add(cmbCategory);
         Controls.Add(label1);
         Name = "RankForm";
-        Text = "RankForm";
         ResumeLayout(false);
         PerformLayout();
     }

@@ -28,6 +28,7 @@ partial class FavForm
     /// </summary>
     private void InitializeComponent()
     {
+        System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FavForm));
         lblSelection = new Label();
         cmbTeams = new ComboBox();
         pnlTeamPlayers = new Panel();
@@ -45,126 +46,81 @@ partial class FavForm
         // 
         // lblSelection
         // 
-        lblSelection.AutoSize = true;
-        lblSelection.Location = new Point(12, 39);
+        resources.ApplyResources(lblSelection, "lblSelection");
         lblSelection.Name = "lblSelection";
-        lblSelection.Size = new Size(134, 15);
-        lblSelection.TabIndex = 0;
-        lblSelection.Text = "Select team from menu:";
         // 
         // cmbTeams
         // 
         cmbTeams.FormattingEnabled = true;
-        cmbTeams.Location = new Point(152, 36);
+        resources.ApplyResources(cmbTeams, "cmbTeams");
         cmbTeams.Name = "cmbTeams";
-        cmbTeams.Size = new Size(189, 23);
-        cmbTeams.TabIndex = 1;
         cmbTeams.SelectedIndexChanged += cmbTeams_SelectedIndexChanged_1;
         // 
         // pnlTeamPlayers
         // 
-        pnlTeamPlayers.Location = new Point(12, 87);
+        resources.ApplyResources(pnlTeamPlayers, "pnlTeamPlayers");
         pnlTeamPlayers.Name = "pnlTeamPlayers";
-        pnlTeamPlayers.Size = new Size(329, 355);
-        pnlTeamPlayers.TabIndex = 2;
         // 
         // pnlFavPlayers
         // 
-        pnlFavPlayers.Location = new Point(523, 87);
+        resources.ApplyResources(pnlFavPlayers, "pnlFavPlayers");
         pnlFavPlayers.Name = "pnlFavPlayers";
-        pnlFavPlayers.Size = new Size(329, 355);
-        pnlFavPlayers.TabIndex = 3;
         // 
         // btnFavAdd
         // 
-        btnFavAdd.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-        btnFavAdd.Location = new Point(382, 169);
+        resources.ApplyResources(btnFavAdd, "btnFavAdd");
         btnFavAdd.Name = "btnFavAdd";
-        btnFavAdd.Size = new Size(107, 23);
-        btnFavAdd.TabIndex = 4;
-        btnFavAdd.Text = "->";
         btnFavAdd.UseVisualStyleBackColor = true;
         // 
         // btnFavRemove
         // 
-        btnFavRemove.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-        btnFavRemove.Location = new Point(382, 281);
+        resources.ApplyResources(btnFavRemove, "btnFavRemove");
         btnFavRemove.Name = "btnFavRemove";
-        btnFavRemove.Size = new Size(107, 23);
-        btnFavRemove.TabIndex = 5;
-        btnFavRemove.Text = "<-";
         btnFavRemove.UseVisualStyleBackColor = true;
         // 
         // lblPlayers
         // 
-        lblPlayers.AutoSize = true;
-        lblPlayers.Location = new Point(12, 69);
+        resources.ApplyResources(lblPlayers, "lblPlayers");
         lblPlayers.Name = "lblPlayers";
-        lblPlayers.Size = new Size(75, 15);
-        lblPlayers.TabIndex = 6;
-        lblPlayers.Text = "Team players";
         // 
         // lblFavPlayers
         // 
-        lblFavPlayers.AutoSize = true;
-        lblFavPlayers.Location = new Point(523, 69);
+        resources.ApplyResources(lblFavPlayers, "lblFavPlayers");
         lblFavPlayers.Name = "lblFavPlayers";
-        lblFavPlayers.Size = new Size(121, 15);
-        lblFavPlayers.TabIndex = 7;
-        lblFavPlayers.Text = "Your favourite players";
         // 
         // lblRankings
         // 
-        lblRankings.AutoSize = true;
-        lblRankings.Location = new Point(371, 446);
+        resources.ApplyResources(lblRankings, "lblRankings");
         lblRankings.Name = "lblRankings";
-        lblRankings.Size = new Size(118, 15);
-        lblRankings.TabIndex = 8;
-        lblRankings.Text = "View player rankings:";
         // 
         // lblSettings
         // 
-        lblSettings.AutoSize = true;
-        lblSettings.Location = new Point(676, 40);
+        resources.ApplyResources(lblSettings, "lblSettings");
         lblSettings.Name = "lblSettings";
-        lblSettings.Size = new Size(95, 15);
-        lblSettings.TabIndex = 9;
-        lblSettings.Text = "Change settings:";
         // 
         // btnSettings
         // 
-        btnSettings.Location = new Point(777, 36);
+        resources.ApplyResources(btnSettings, "btnSettings");
         btnSettings.Name = "btnSettings";
-        btnSettings.Size = new Size(75, 23);
-        btnSettings.TabIndex = 10;
-        btnSettings.Text = "Settings";
         btnSettings.UseVisualStyleBackColor = true;
         btnSettings.Click += btnSettings_Click;
         // 
         // btnRankings
         // 
-        btnRankings.Location = new Point(394, 464);
+        resources.ApplyResources(btnRankings, "btnRankings");
         btnRankings.Name = "btnRankings";
-        btnRankings.Size = new Size(75, 23);
-        btnRankings.TabIndex = 11;
-        btnRankings.Text = "Rankings";
         btnRankings.UseVisualStyleBackColor = true;
         btnRankings.Click += btnRankings_Click;
         // 
         // lblState
         // 
-        lblState.AutoSize = true;
-        lblState.Location = new Point(676, 9);
+        resources.ApplyResources(lblState, "lblState");
         lblState.Name = "lblState";
-        lblState.Size = new Size(38, 15);
-        lblState.TabIndex = 12;
-        lblState.Text = "label6";
         // 
         // FavForm
         // 
-        AutoScaleDimensions = new SizeF(7F, 15F);
+        resources.ApplyResources(this, "$this");
         AutoScaleMode = AutoScaleMode.Font;
-        ClientSize = new Size(864, 601);
         Controls.Add(lblState);
         Controls.Add(btnRankings);
         Controls.Add(btnSettings);
@@ -179,7 +135,6 @@ partial class FavForm
         Controls.Add(cmbTeams);
         Controls.Add(lblSelection);
         Name = "FavForm";
-        Text = "FavForm";
         ResumeLayout(false);
         PerformLayout();
     }

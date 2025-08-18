@@ -1,16 +1,17 @@
-﻿using System;
+﻿using DAL.Models.Enums;
+using DAL.Repository;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Printing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using DAL.Repository;
 using WorldCupWinForms.Model;
-using DAL.Models.Enums;
-using System.Drawing.Printing;
 
 namespace WorldCupWinForms;
 public partial class RankForm : Form
@@ -19,6 +20,15 @@ public partial class RankForm : Form
     private readonly IMatchDataRepo matchDataDataRepo;
     public RankForm(State state)
     {
+        if (state.SelectedLanguage == Language.Croatian)
+        {
+            Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("hr-HR");
+        }
+        else
+        {
+            Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("en-US");
+        }
+
         InitializeComponent();
         this.state = state;
         matchDataDataRepo = new LocalMatchDataRepo();
