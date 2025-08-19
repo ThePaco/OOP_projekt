@@ -1,17 +1,8 @@
 ﻿using DAL.Models.Enums;
 using DAL.Repository;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Drawing.Printing;
 using System.Globalization;
-using System.Linq;
 using System.Resources;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using WorldCupWinForms.Model;
 
 namespace WorldCupWinForms;
@@ -19,50 +10,41 @@ namespace WorldCupWinForms;
 public partial class RankForm : Form
 {
     private readonly State state;
-    private readonly IMatchDataRepo matchDataDataRepo;
+    private readonly LocalMatchDataRepo matchDataDataRepo;
+    private readonly RemoteMatchDataRepo repositoryAPI;
+    private readonly ResourceManager resourceManager;
 
     public RankForm(State state)
     {
-        if (state.SelectedLanguage == Language.Croatian)
-        {
-            Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("hr-HR");
-        }
-        else
-        {
-            Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("en-US");
-        }
+        this.state = state;
+        Thread.CurrentThread.CurrentUICulture = state.SelectedLanguage == Language.Croatian
+                                                    ? new CultureInfo("hr-HR") 
+                                                    : new CultureInfo("en-US");
 
         InitializeComponent();
 
-        var resourcemanager = new ResourceManager($"{typeof(RankForm).FullName}", typeof(RankForm).Assembly);
-        var comboItems = ComboRankingItems.GetItemsForLanguage(resourcemanager);
-        cmbCategory.DataSource = comboItems;
+        resourceManager = new ResourceManager($"{typeof(RankForm).FullName}", typeof(RankForm).Assembly);
 
-        this.state = state;
+        cmbCategory.DataSource = ComboRankingItems.GetItemsForLanguage(resourceManager);
         matchDataDataRepo = new LocalMatchDataRepo();
     }
 
-    private void btnRank_Click(object sender, EventArgs e)
-    {
-        var selected = cmbCategory.SelectedItem as string;
-        DisplayRankingsAsync(selected);
-    }
+    private void btnRank_Click(object sender, EventArgs e) => DisplayRankingsAsync(cmbCategory);
 
-    private void btnPrint_Click(object sender, EventArgs e)
-    {
-        ExportRankingsToPDF(lbRankResults);
-    }
+    private void btnPrint_Click(object sender, EventArgs e) => ExportRankingsToPDF(lbRankResults);
 
-    private async void DisplayRankingsAsync(string? selected)
+    private async void DisplayRankingsAsync(ComboBox cmComboBox)
     {
         lbRankResults.Items.Clear();
-        if (selected == null)
+        var selectedRank = cmbCategory.SelectedValue as RankType?;
+
+        if (selectedRank is null)
         {
-            MessageBox.Show("Please select a category.");
+            MessageBox.Show(resourceManager.GetString("RankForm_Please_select_a_category"));
             return;
         }
 
-        if (selected == "Players by most goals")
+        if (selectedRank == RankType.Goals)
         {
             try
             {
@@ -110,7 +92,7 @@ public partial class RankForm : Form
             }
         }
 
-        else if (selected == "Players by most yellow cards")
+        else if (selectedRank == RankType.YellowCards)
         {
             try
             {
@@ -158,7 +140,7 @@ public partial class RankForm : Form
             }
         }
 
-        else if (selected == "Matches by most attendance")
+        else if (selectedRank == RankType.Attendance)
         {
             try
             {
@@ -263,7 +245,7 @@ public partial class RankForm : Form
         {
             if (listBox.Items.Count == 0)
             {
-                MessageBox.Show("No data to export.", "Export Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(resourceManager.GetString("No_data_to_export"), "Export Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -292,13 +274,12 @@ public partial class RankForm : Form
     {
         try
         {
-            // stylizing tools
+            // stylizing 
             Graphics graphics = e.Graphics;
             Font titleFont = new Font("Arial", 16, FontStyle.Bold);
             Font contentFont = new Font("Arial", 10, FontStyle.Regular);
             Brush blackBrush = Brushes.Black;
             Brush grayBrush = Brushes.Gray;
-
             float yPosition = 50;
             float leftMargin = 50;
             float rightMargin = e.PageBounds.Width - 50;
@@ -336,12 +317,15 @@ public class ComboRankingItems
 
     public string Text { get; set; } = null!;
 
-    public static ComboRankingItems[] GetItemsForLanguage(ResourceManager resourceManager) =>
-    [
-        new ComboRankingItems { Id = RankType.Goals, Text = resourceManager.GetString("ComboRankItem_1")! },
-        new ComboRankingItems { Id = RankType.YellowCards, Text = resourceManager.GetString("ComboRankItem_2")! },
-        new ComboRankingItems { Id = RankType.Attendance, Text = resourceManager.GetString("ComboRankItem_3")! }
-    ];
+    public static ComboRankingItems[] GetItemsForLanguage(ResourceManager resourceManager)
+    {
+        return
+        [
+            new ComboRankingItems { Id = RankType.Goals, Text = resourceManager.GetString("ComboRankItem_1")! },
+            new ComboRankingItems { Id = RankType.YellowCards, Text = resourceManager.GetString("ComboRankItem_2")! },
+            new ComboRankingItems { Id = RankType.Attendance, Text = resourceManager.GetString("ComboRankItem_3")! }
+        ];
+    }
 
     private ComboRankingItems()
     {

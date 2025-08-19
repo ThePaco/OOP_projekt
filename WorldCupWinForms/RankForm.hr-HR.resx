@@ -118,15 +118,24 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="label1.Text" xml:space="preserve">
-    <value>odaberi kategoriju</value>
+    <value>Odaberi kategoriju rangiranja:</value>
+  </data>
+  <data name="label2.Text" xml:space="preserve">
+    <value>Izvezi podatke u PDF-u:</value>
   </data>
   <data name="ComboRankItem_1" xml:space="preserve">
-    <value>ovo je jedan</value>
+    <value>Igrače po golovima</value>
   </data>
   <data name="ComboRankItem_3" xml:space="preserve">
-    <value>ovo je tri</value>
+    <value>Igre po gledateljima</value>
   </data>
   <data name="ComboRankItem_2" xml:space="preserve">
-    <value>ovo je dva</value>
+    <value>Igrače po žutim kartonima</value>
+  </data>
+  <data name="RankForm_Please_select_a_category" xml:space="preserve">
+    <value>Prvo odaberite kategoriju.</value>
+  </data>
+  <data name="No_data_to_export" xml:space="preserve">
+    <value>Ne postoje podaci za ispis.</value>
   </data>
 </root>

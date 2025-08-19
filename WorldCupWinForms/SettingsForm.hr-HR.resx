@@ -117,87 +117,37 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="lblSelection.Text" xml:space="preserve">
-    <value>Odaberi reprezentaciju:</value>
+  <data name="label1.Text" xml:space="preserve">
+    <value>Promijeni postavke</value>
   </data>
-  <data name="lblPlayers.Text" xml:space="preserve">
-    <value>Igrači reprezentacije:</value>
+  <data name="btnSave.Text" xml:space="preserve">
+    <value>Spremi</value>
   </data>
-  <data name="lblFavPlayers.Text" xml:space="preserve">
-    <value>Omiljeni igrači:</value>
+  <data name="btnCancel.Text" xml:space="preserve">
+    <value>Otkaži</value>
   </data>
-  <data name="lblRankings.Text" xml:space="preserve">
-    <value>Pogledaj rang liste:</value>
+  <data name="rbEng.Text" xml:space="preserve">
+    <value>Engleski</value>
   </data>
-  <data name="lblSettings.Text" xml:space="preserve">
-    <value>Promijeni:</value>
+  <data name="rbCro.Text" xml:space="preserve">
+    <value>Hrvatski</value>
   </data>
-  <data name="btnSettings.Text" xml:space="preserve">
-    <value>Postavke</value>
+  <data name="gbLanguage.Text" xml:space="preserve">
+    <value>Jezik</value>
   </data>
-  <data name="btnRankings.Text" xml:space="preserve">
-    <value>Rangiranje</value>
+  <data name="rbWomen.Text" xml:space="preserve">
+    <value>Ženska liga</value>
   </data>
-  <data name="lblState.Text" xml:space="preserve">
-    <value>Trenutne postavke</value>
+  <data name="rbMen.Text" xml:space="preserve">
+    <value>Muška liga</value>
   </data>
-  <data name="Remove_from_favs" xml:space="preserve">
-    <value>Ukloni iz favorita</value>
+  <data name="gbCategory.Text" xml:space="preserve">
+    <value>Muško/Ženska Liga</value>
   </data>
-  <data name="Add_to_favs" xml:space="preserve">
-    <value>Dodaj u favorite</value>
+  <data name="rbLocalFiles.Text" xml:space="preserve">
+    <value>Datoteka na disku</value>
   </data>
-  <data name="Add_change_img" xml:space="preserve">
-    <value>Dodaj/Promijeni sliku</value>
-  </data>
-  <data name="Remove_img" xml:space="preserve">
-    <value>Ukloni sliku</value>
-  </data>
-  <data name="Select_img_for" xml:space="preserve">
-    <value>Odaberi sliku za</value>
-  </data>
-  <data name="Added_img_for" xml:space="preserve">
-    <value>Slika uspješno dodana za</value>
-  </data>
-  <data name="Remove_img_for" xml:space="preserve">
-    <value>Ukloni sliku za</value>
-  </data>
-  <data name="Confirm_img_removal" xml:space="preserve">
-    <value>Potvrdi uklanjanje slike</value>
-  </data>
-  <data name="Img_removed_for" xml:space="preserve">
-    <value>Slika uklonjena za</value>
-  </data>
-  <data name="Img_removed" xml:space="preserve">
-    <value>Slika uklonjena</value>
-  </data>
-  <data name="Img_added" xml:space="preserve">
-    <value>Slika dodana</value>
-  </data>
-  <data name="Fav_panel_info" xml:space="preserve">
-    <value>Povuci (ili drži Ctrl) kako bi dodli igrače u favorite
-(Dupli-klik kako bi ih uklonili)
-Maksimalno: 3 igrača</value>
-  </data>
-  <data name="Max_three_fav_players" xml:space="preserve">
-    <value>Možete dodati maksimalno 3 igrača u listu omiljenih igrača!</value>
-  </data>
-  <data name="Max_reached" xml:space="preserve">
-    <value>Maksimum dosegnut</value>
-  </data>
-  <data name="Duplicate_player" xml:space="preserve">
-    <value>Igrač već dodan</value>
-  </data>
-  <data name="Player_already_in_fav" xml:space="preserve">
-    <value>je već u Vašim favoritima!</value>
-  </data>
-  <data name="Confirm_removal" xml:space="preserve">
-    <value>Potvrdi uklanjanje</value>
-  </data>
-  <data name="No_team_players_data" xml:space="preserve">
-    <value>Ne postoje podaci o igračima za ovu momčad</value>
-  </data>
-  <data name="Remove_player_from_favs" xml:space="preserve">
-    <value>Uklonit igrača iz favorita?</value>
+  <data name="gbSource.Text" xml:space="preserve">
+    <value>Izvor podataka</value>
   </data>
 </root>

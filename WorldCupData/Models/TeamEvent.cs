@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace DAL.Models;
 
-public partial class TeamEvent
+public class TeamEvent
 {
     [JsonPropertyName("id")]
     public long Id { get; set; }

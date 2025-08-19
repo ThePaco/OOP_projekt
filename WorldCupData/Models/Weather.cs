@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace DAL.Models;
 
-public partial class Weather
+public class Weather
 {
     [JsonPropertyName("humidity")]
     [JsonConverter(typeof(ParseStringConverter))]

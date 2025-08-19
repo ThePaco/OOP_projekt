@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace DAL.Models;
 
-public partial class TeamStatistics
+public class TeamStatistics
 {
     [JsonPropertyName("country")]
     public string Country { get; set; }

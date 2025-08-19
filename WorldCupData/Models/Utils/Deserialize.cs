@@ -36,7 +36,7 @@ namespace DAL.Models
 
     //public partial class Teams
     //{
-
+    //    public static List<Teams> FromJson(string json) => JsonSerializer.Deserialize<List<Teams>>(json, Converter.Settings);
     //}
 }
 #pragma warning restore CS8618

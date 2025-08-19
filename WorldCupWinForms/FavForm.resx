@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
+  <!--
+    Microsoft ResX Schema
+
     Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
     associated with the data types.
-    
+
     Example:
-    
+
     ... ado.net/XML headers & schema ...
     <resheader name="resmimetype">text/microsoft-resx</resheader>
     <resheader name="version">2.0</resheader>
@@ -26,36 +26,36 @@
         <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
         <comment>This is a comment</comment>
     </data>
-                
-    There are any number of "resheader" rows that contain simple 
+
+    There are any number of "resheader" rows that contain simple
     name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
     mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
     extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
     read any of the formats listed below.
-    
+
     mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
-    
+
     mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
             : and then encoded with base64 encoding.
 
     mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
+    value   : The object must be serialized into a byte array
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
@@ -144,7 +144,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;lblSelection.ZOrder" xml:space="preserve">
-    <value>12</value>
+    <value>11</value>
   </data>
   <data name="cmbTeams.Location" type="System.Drawing.Point, System.Drawing">
     <value>152, 36</value>
@@ -165,7 +165,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;cmbTeams.ZOrder" xml:space="preserve">
-    <value>11</value>
+    <value>10</value>
   </data>
   <data name="pnlTeamPlayers.Location" type="System.Drawing.Point, System.Drawing">
     <value>12, 87</value>
@@ -186,7 +186,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;pnlTeamPlayers.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>9</value>
   </data>
   <data name="pnlFavPlayers.Location" type="System.Drawing.Point, System.Drawing">
     <value>523, 87</value>
@@ -207,7 +207,10 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;pnlFavPlayers.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>8</value>
+  </data>
+  <data name="btnFavAdd.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="btnFavAdd.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt, style=Bold</value>
@@ -234,7 +237,10 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;btnFavAdd.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>7</value>
+  </data>
+  <data name="btnFavRemove.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="btnFavRemove.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt, style=Bold</value>
@@ -261,7 +267,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;btnFavRemove.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>6</value>
   </data>
   <data name="lblPlayers.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -270,13 +276,13 @@
     <value>12, 69</value>
   </data>
   <data name="lblPlayers.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 15</value>
+    <value>78, 15</value>
   </data>
   <data name="lblPlayers.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
   </data>
   <data name="lblPlayers.Text" xml:space="preserve">
-    <value>Team players</value>
+    <value>Team players:</value>
   </data>
   <data name="&gt;&gt;lblPlayers.Name" xml:space="preserve">
     <value>lblPlayers</value>
@@ -288,7 +294,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;lblPlayers.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>5</value>
   </data>
   <data name="lblFavPlayers.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -297,13 +303,13 @@
     <value>523, 69</value>
   </data>
   <data name="lblFavPlayers.Size" type="System.Drawing.Size, System.Drawing">
-    <value>121, 15</value>
+    <value>117, 15</value>
   </data>
   <data name="lblFavPlayers.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
   </data>
   <data name="lblFavPlayers.Text" xml:space="preserve">
-    <value>Your favourite players</value>
+    <value>Your favorite players:</value>
   </data>
   <data name="&gt;&gt;lblFavPlayers.Name" xml:space="preserve">
     <value>lblFavPlayers</value>
@@ -315,7 +321,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;lblFavPlayers.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>4</value>
   </data>
   <data name="lblRankings.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -342,7 +348,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;lblRankings.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>3</value>
   </data>
   <data name="lblSettings.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -369,7 +375,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;lblSettings.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>2</value>
   </data>
   <data name="btnSettings.Location" type="System.Drawing.Point, System.Drawing">
     <value>777, 36</value>
@@ -393,7 +399,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;btnSettings.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>1</value>
   </data>
   <data name="btnRankings.Location" type="System.Drawing.Point, System.Drawing">
     <value>394, 464</value>
@@ -417,35 +423,11 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;btnRankings.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="lblState.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="lblState.Location" type="System.Drawing.Point, System.Drawing">
-    <value>676, 9</value>
-  </data>
-  <data name="lblState.Size" type="System.Drawing.Size, System.Drawing">
-    <value>43, 15</value>
-  </data>
-  <data name="lblState.TabIndex" type="System.Int32, mscorlib">
-    <value>12</value>
-  </data>
-  <data name="&gt;&gt;lblState.Name" xml:space="preserve">
-    <value>lblState</value>
-  </data>
-  <data name="&gt;&gt;lblState.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lblState.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;lblState.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="$this.Localizable" type="System.Boolean, mscorlib">
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
-  </data>
+  </metadata>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
     <value>7, 15</value>
   </data>
@@ -460,8 +442,5 @@
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
     <value>System.Windows.Forms.Form, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="lblState.Text" xml:space="preserve">
-    <value>this is FOO</value>
   </data>
 </root>

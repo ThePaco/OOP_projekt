@@ -1,16 +1,10 @@
 ﻿using DAL.Models;
-using DAL.Repository;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using DAL.Models.Enums;
+using DAL.Repository;
+using System.ComponentModel;
+using System.Globalization;
+using System.Resources;
+using System.Text.RegularExpressions;
 using WorldCupWinForms.Model;
 
 namespace WorldCupWinForms;
@@ -18,7 +12,9 @@ namespace WorldCupWinForms;
 public partial class FavForm : Form
 {
     private readonly State state;
+    private readonly ResourceManager resourceManager;
     private readonly LocalMatchDataRepo repository;
+    private readonly RemoteMatchDataRepo repositoryAPI;
     private readonly IUserFavouritesRepo favouritesRepository;
     private readonly IUserSettingsRepo settingsRepository;
     private readonly IImagesRepo imagesRepository;
@@ -28,7 +24,10 @@ public partial class FavForm : Form
     public FavForm()
     {
         InitializeComponent();
-        state = new State(); //settings track
+        state = new State();
+        state.OnSettingsChanged += (sender, e) => UpdateForm();
+
+        resourceManager = new ResourceManager($"{typeof(FavForm).FullName}", typeof(FavForm).Assembly);
         repository = new LocalMatchDataRepo();
         favouritesRepository = new UserFavouritesRepo();
         settingsRepository = new UserSettingsRepo();
@@ -38,11 +37,9 @@ public partial class FavForm : Form
         pnlFavPlayers.AllowDrop = true;
         pnlFavPlayers.DragEnter += PnlFavPlayers_DragEnter;
         pnlFavPlayers.DragDrop += PnlFavPlayers_DragDrop;
-
-        InitializeApplicationAsync();
     }
 
-    private async void InitializeApplicationAsync()
+    public async void InitializeApplication()
     {
         try
         {
@@ -55,9 +52,9 @@ public partial class FavForm : Form
                 {
                     var defaultSettings = new UserSettings
                                           {
-                                              Language = DAL.Models.Enums.Language.English,
-                                              Gender = DAL.Models.Enums.Gender.Men,
-                                              DataSource = DAL.Models.Enums.DataSource.Local,
+                                              Language = Language.English,
+                                              Gender = Gender.Men,
+                                              DataSource = DataSource.Local,
                                               Resolution = Resolution.w1080_h1920
                                           };
                     ApplySettingsToState(defaultSettings);
@@ -70,15 +67,31 @@ public partial class FavForm : Form
                 await LoadUserSettingsAsync();
             }
 
-            UpdateStateLabel();
-
-            LoadTeamsAsync();
-            LoadFavouritePlayersAsync();
+            await LoadTeamsAsync();
+            await LoadFavouritePlayersAsync();
         }
         catch (Exception ex)
         {
             MessageBox.Show($"Error initializing application: {ex.Message}", "Initialization Error",
                             MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+    }
+
+    private void UpdateForm()
+    {
+        if (state.SelectedLanguage == Language.Croatian)
+        {
+            var culture = new CultureInfo("hr-HR");
+            Thread.CurrentThread.CurrentUICulture = culture;
+            CultureInfo.DefaultThreadCurrentUICulture = culture;
+            ApplyResourceToControl(this, new ComponentResourceManager(typeof(FavForm)), culture);
+        }
+        else
+        {
+            var culture = new CultureInfo("en-US");
+            Thread.CurrentThread.CurrentUICulture = culture;
+            CultureInfo.DefaultThreadCurrentUICulture = culture;
+            ApplyResourceToControl(this, new ComponentResourceManager(typeof(FavForm)), culture);
         }
     }
 
@@ -96,51 +109,26 @@ public partial class FavForm : Form
         }
     }
 
-    private async Task SaveCurrentSettingsAsync()
-    {
-        try
-        {
-            var userSettings = new UserSettings
-                               {
-                                   Language = state.SelectedLanguage,
-                                   Gender = state.SelectedGender,
-                                   DataSource = state.SelectedSource,
-                                   Resolution = Resolution.w1080_h1920 // not needed in forms
-                               };
-
-            await settingsRepository.SaveUserSettingsAsync(userSettings);
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show($"Error saving user settings: {ex.Message}", "Settings Error",
-                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
-        }
-    }
-
     private void ApplySettingsToState(UserSettings userSettings)
     {
         state.SelectedLanguage = userSettings.Language;
         state.SelectedGender = userSettings.Gender;
         state.SelectedSource = userSettings.DataSource;
+
+        UpdateForm();
     }
 
-    private void UpdateStateLabel()
+    private Task SaveCurrentSettingsAsync()
     {
-        if (state.SelectedLanguage == Language.Croatian)
-        {
-            Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("hr-HR");
-            ApplyResourceToControl(this, new ComponentResourceManager(typeof(FavForm)), new CultureInfo("hr-HR"));
-        }
-        else
-        {
-            Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("en-US");
-            ApplyResourceToControl(this, new ComponentResourceManager(typeof(FavForm)), new CultureInfo("en-US"));
-        }
+        var userSettings = new UserSettings
+                           {
+                               Language = state.SelectedLanguage,
+                               Gender = state.SelectedGender,
+                               DataSource = state.SelectedSource,
+                               Resolution = Resolution.w1080_h1920 // not needed in forms
+                           };
 
-        
-
-        //lblState.Text = $@"Current: {state.SelectedLanguage.ToString()} - " +
-        //                $@" {state.SelectedGender.ToString()}";
+        return settingsRepository.SaveUserSettingsAsync(userSettings);
     }
 
     private void ApplyResourceToControl(Control control, ComponentResourceManager cmp, CultureInfo cultureInfo)
@@ -153,43 +141,78 @@ public partial class FavForm : Form
         }
     }
 
-    private async void LoadFavouritePlayersAsync()
+    private async Task LoadTeamsAsync()
     {
-        try
+        cmbTeams.Items.Clear();
+        cmbTeams.DisplayMember = "Country";
+        cmbTeams.ValueMember = "FifaCode";
+
+        var teams = await repository.GetTeams(state.SelectedGender);
+        var sortedTeams = teams.OrderBy(t => t.Country).ToArray();
+
+        cmbTeams.Items.AddRange(sortedTeams.Cast<object>().ToArray());
+
+        if (cmbTeams.Items.Count > 0)
         {
-            var savedFavourites = await favouritesRepository.GetFavouritePlayersAsync();
-            favoritePlayersList.Clear();
-            favoritePlayersList.AddRange(savedFavourites);
-            RefreshFavoritePlayersPanel();
-            RefreshTeamPlayersPanel();
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show($"Error loading favourite players: {ex.Message}", "Error",
-                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            cmbTeams.SelectedIndex = 0;
         }
     }
 
-    private async void SaveFavouritePlayersAsync()
+    private async Task LoadTeamPlayersAsync(string fifaCode)
     {
         try
         {
-            await favouritesRepository.SaveFavouritePlayersAsync(favoritePlayersList);
+            var players = await repository.GetPlayersByTeamAsync(state.SelectedGender, fifaCode);
+
+            if (players?.Any() == true)
+            {
+                PopulatePlayersPanelAsync(pnlTeamPlayers, players);
+            }
+            else
+            {
+                pnlTeamPlayers.Controls.Clear();
+                var noPlayersLabel = new Label
+                                     {
+                                         Text = $"{resourceManager.GetString("No_team_players_data")}",
+                                         Location = new Point(10, 10),
+                                         Size = new Size(280, 30),
+                                         Font = new Font("Arial", 10),
+                                         ForeColor = Color.Gray
+                                     };
+                pnlTeamPlayers.Controls.Add(noPlayersLabel);
+            }
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Error saving favourite players: {ex.Message}", "Error",
-                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show($"Error loading team players: {ex.Message}", "Error",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
-    private async void PopulatePlayersPanel(Panel panel, IEnumerable<StartingEleven> players)
+    private async Task RefreshTeamPlayersPanelAsync()
+    {
+        if (cmbTeams.SelectedItem is Teams selectedTeam)
+            await LoadTeamPlayersAsync(selectedTeam.FifaCode);
+    }
+
+    private async Task LoadFavouritePlayersAsync()
+    {
+        var savedFavourites = await favouritesRepository.GetFavouritePlayersAsync();
+        favoritePlayersList.Clear();
+        favoritePlayersList.AddRange(savedFavourites);
+        await RefreshFavoritePlayersPanelAsync();
+        await RefreshTeamPlayersPanelAsync();
+    }
+
+    private Task SaveFavouritePlayersAsync() => favouritesRepository.SaveFavouritePlayersAsync(favoritePlayersList);
+
+    private async Task PopulatePlayersPanelAsync(Panel panel, IEnumerable<StartingEleven> players)
     {
         panel.Controls.Clear();
         panel.AutoScroll = true;
 
         var yPosition = 10;
-        const int playerHeight = 60; // Increased height to accommodate image
+        const int playerHeight = 60;
         const int margin = 5;
         const int imageSize = 50;
 
@@ -199,7 +222,6 @@ public partial class FavForm : Form
                                       favoritePlayersList.Any(fp => fp.Name.Equals(player.Name, StringComparison.OrdinalIgnoreCase) &&
                                                                     fp.ShirtNumber == player.ShirtNumber);
 
-            // Check if this player is selected for multi-selection
             var isPlayerSelected = selectedPlayers.Any(sp => sp.Name.Equals(player.Name, StringComparison.OrdinalIgnoreCase) &&
                                                              sp.ShirtNumber == player.ShirtNumber);
 
@@ -210,23 +232,23 @@ public partial class FavForm : Form
             if (isPlayerInFavorites) displayText += " ⭐";
             if (isPlayerSelected) displayText = "✓ " + displayText;
 
-            Panel playerPanel = new Panel
-                                {
-                                    Location = new Point(10, yPosition),
-                                    Size = new Size(280, playerHeight),
-                                    BackColor = isPlayerSelected ? Color.LightCyan : (panel == pnlFavPlayers ? Color.LightBlue : Color.LightGray),
-                                    BorderStyle = BorderStyle.FixedSingle,
-                                    Cursor = Cursors.Hand,
-                                    Tag = player // Store the player object for drag and drop
-                                };
+            var playerPanel = new Panel
+                              {
+                                  Location = new Point(10, yPosition),
+                                  Size = new Size(280, playerHeight),
+                                  BackColor = isPlayerSelected ? Color.LightCyan : (panel == pnlFavPlayers ? Color.LightBlue : Color.LightGray),
+                                  BorderStyle = BorderStyle.FixedSingle,
+                                  Cursor = Cursors.Hand,
+                                  Tag = player // Store the player object for drag and drop
+                              };
 
-            PictureBox playerImage = new PictureBox
-                                     {
-                                         Location = new Point(5, 5),
-                                         Size = new Size(imageSize, imageSize),
-                                         SizeMode = PictureBoxSizeMode.Zoom,
-                                         BorderStyle = BorderStyle.FixedSingle
-                                     };
+            var playerImage = new PictureBox
+                              {
+                                  Location = new Point(5, 5),
+                                  Size = new Size(imageSize, imageSize),
+                                  SizeMode = PictureBoxSizeMode.Zoom,
+                                  BorderStyle = BorderStyle.FixedSingle
+                              };
 
             try
             {
@@ -234,22 +256,23 @@ public partial class FavForm : Form
                 using var ms = new MemoryStream(imageData);
                 playerImage.Image = Image.FromStream(ms);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 playerImage.BackColor = Color.LightGray;
+                throw;
             }
 
-            Label playerLabel = new Label
-                                {
-                                    Text = displayText,
-                                    Location = new Point(imageSize + 10, 5),
-                                    Size = new Size(215, playerHeight - 10),
-                                    Font = new Font("Arial", 9),
-                                    ForeColor = isPlayerSelected ? Color.Blue : (isPlayerInFavorites ? Color.OrangeRed : Color.Black),
-                                    TextAlign = ContentAlignment.MiddleLeft
-                                };
+            var playerLabel = new Label
+                              {
+                                  Text = displayText,
+                                  Location = new Point(imageSize + 10, 5),
+                                  Size = new Size(215, playerHeight - 10),
+                                  Font = new Font("Arial", 9),
+                                  ForeColor = isPlayerSelected ? Color.Blue : (isPlayerInFavorites ? Color.OrangeRed : Color.Black),
+                                  TextAlign = ContentAlignment.MiddleLeft
+                              };
 
-            ContextMenuStrip contextMenu = CreatePlayerContextMenu(player, isPlayerInFavorites, panel == pnlFavPlayers);
+            var contextMenu = CreatePlayerContextMenu(player, isPlayerInFavorites, panel == pnlFavPlayers);
 
             playerPanel.Controls.Add(playerImage);
             playerPanel.Controls.Add(playerLabel);
@@ -257,11 +280,10 @@ public partial class FavForm : Form
             playerImage.ContextMenuStrip = contextMenu;
             playerLabel.ContextMenuStrip = contextMenu;
 
-            //drag and drop for team players only (not favs)
             if (panel == pnlTeamPlayers)
             {
                 playerPanel.MouseDown += PlayerPanel_MouseDown;
-                playerPanel.Click += PlayerPanel_Click; // Handle selection
+                playerPanel.Click += PlayerPanel_Click;
 
                 playerLabel.MouseDown += PlayerPanel_MouseDown;
                 playerLabel.Click += PlayerPanel_Click;
@@ -271,7 +293,6 @@ public partial class FavForm : Form
             }
             else if (panel == pnlFavPlayers)
             {
-                //favorite players, add right-click context menu or double-click to remove
                 playerPanel.DoubleClick += (sender, e) => RemoveFromFavorites(player);
                 playerLabel.DoubleClick += (sender, e) => RemoveFromFavorites(player);
                 playerImage.DoubleClick += (sender, e) => RemoveFromFavorites(player);
@@ -284,19 +305,20 @@ public partial class FavForm : Form
 
     private ContextMenuStrip CreatePlayerContextMenu(StartingEleven player, bool isInFavorites, bool isFavoritePanel)
     {
-        ContextMenuStrip contextMenu = new ContextMenuStrip();
+        var contextMenu = new ContextMenuStrip();
 
+        //todo localize
         if (!isFavoritePanel)
         {
             if (isInFavorites)
             {
-                var removeFavoriteItem = new ToolStripMenuItem("Remove from Favorites");
+                var removeFavoriteItem = new ToolStripMenuItem(resourceManager.GetString("Remove_from_favs"));
                 removeFavoriteItem.Click += (s, e) => RemoveFromFavorites(player);
                 contextMenu.Items.Add(removeFavoriteItem);
             }
             else
             {
-                var addFavoriteItem = new ToolStripMenuItem("Add to Favorites");
+                var addFavoriteItem = new ToolStripMenuItem(resourceManager.GetString("Add_to_favs"));
                 addFavoriteItem.Click += (s, e) => AddToFavorites(player);
                 contextMenu.Items.Add(addFavoriteItem);
             }
@@ -304,18 +326,18 @@ public partial class FavForm : Form
             contextMenu.Items.Add(new ToolStripSeparator());
         }
 
-        var addImageItem = new ToolStripMenuItem("Add/Change Image");
+        var addImageItem = new ToolStripMenuItem(resourceManager.GetString("Add_change_img"));
         addImageItem.Click += async (s, e) => await AddPlayerImageAsync(player);
         contextMenu.Items.Add(addImageItem);
 
-        var removeImageItem = new ToolStripMenuItem("Remove Image");
+        var removeImageItem = new ToolStripMenuItem(resourceManager.GetString("Remove_img"));
         removeImageItem.Click += async (s, e) => await RemovePlayerImageAsync(player);
         contextMenu.Items.Add(removeImageItem);
 
         if (isFavoritePanel)
         {
             contextMenu.Items.Add(new ToolStripSeparator());
-            var removeFavoriteItem = new ToolStripMenuItem("Remove from Favorites");
+            var removeFavoriteItem = new ToolStripMenuItem(resourceManager.GetString("Remove_from_favs"));
             removeFavoriteItem.Click += (s, e) => RemoveFromFavorites(player);
             contextMenu.Items.Add(removeFavoriteItem);
         }
@@ -327,16 +349,16 @@ public partial class FavForm : Form
     {
         try
         {
-            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            using (var openFileDialog = new OpenFileDialog())
             {
-                openFileDialog.Title = $"Select Image for {player.Name}";
+                openFileDialog.Title = $"{resourceManager.GetString("Select_img_for")} {player.Name}";
                 openFileDialog.Filter = "Image Files (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png";
                 openFileDialog.FilterIndex = 1;
                 openFileDialog.RestoreDirectory = true;
 
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    byte[] imageData = await File.ReadAllBytesAsync(openFileDialog.FileName);
+                    var imageData = await File.ReadAllBytesAsync(openFileDialog.FileName);
                     var extension = Path.GetExtension(openFileDialog.FileName).ToLower();
                     if (extension == ".jpeg")
                         extension = ".jpg";
@@ -344,11 +366,12 @@ public partial class FavForm : Form
 
                     await imagesRepository.UploadImageAsync(imageData, fileName);
 
-                    MessageBox.Show($"Image successfully added for {player.Name}!", "Image Added",
+                    MessageBox.Show($"{resourceManager.GetString("Add_change_img")} {player.Name}!",
+                                    $"{resourceManager.GetString("Img_added")}",
                                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    RefreshFavoritePlayersPanel();
-                    RefreshTeamPlayersPanel();
+                    RefreshFavoritePlayersPanelAsync();
+                    RefreshTeamPlayersPanelAsync();
                 }
             }
         }
@@ -361,9 +384,11 @@ public partial class FavForm : Form
 
     private async Task RemovePlayerImageAsync(StartingEleven player)
     {
+        //todo localize
         try
         {
-            var result = MessageBox.Show($"Remove image for {player.Name}?", "Confirm Image Removal",
+            var result = MessageBox.Show($"{resourceManager.GetString("Remove_img_for")} {player.Name}?", 
+                                         $"{resourceManager.GetString("Confirm_img_removal")}",
                                          MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (result == DialogResult.Yes)
@@ -386,11 +411,12 @@ public partial class FavForm : Form
                     // Ignore if .jpg doesn't exist
                 }
 
-                MessageBox.Show($"Image removed for {player.Name}!", "Image Removed",
+                MessageBox.Show($"{resourceManager.GetString("Img_removed_for")} {player.Name}",
+                                $"{resourceManager.GetString("Img_removed")}",
                                 MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                RefreshFavoritePlayersPanel();
-                RefreshTeamPlayersPanel();
+                RefreshFavoritePlayersPanelAsync();
+                RefreshTeamPlayersPanelAsync();
             }
         }
         catch (Exception ex)
@@ -415,16 +441,14 @@ public partial class FavForm : Form
 
         if (player != null)
         {
-            // Check if Control key is held
             if (ModifierKeys.HasFlag(Keys.Control))
             {
                 //TODO HandleMultiSelection(player);
             }
             else
             {
-                // Clear selection if Control is not held
                 selectedPlayers.Clear();
-                RefreshTeamPlayersPanel();
+                RefreshTeamPlayersPanelAsync();
             }
         }
     }
@@ -450,29 +474,25 @@ public partial class FavForm : Form
 
         if (player != null)
         {
-            // If we have selected players and Control is held, drag all selected players
             if (selectedPlayers.Count > 0 && ModifierKeys.HasFlag(Keys.Control))
             {
-                // Ensure the clicked player is in the selection
                 if (!selectedPlayers.Any(p => p.Name.Equals(player.Name, StringComparison.OrdinalIgnoreCase) &&
                                               p.ShirtNumber == player.ShirtNumber))
                 {
                     if (selectedPlayers.Count < 3)
                     {
                         selectedPlayers.Add(player);
-                        RefreshTeamPlayersPanel();
+                        RefreshTeamPlayersPanelAsync();
                     }
                 }
 
-                // Start drag operation with selected players
                 var sourceControl = sender as Control;
                 sourceControl?.DoDragDrop(selectedPlayers.ToList(), DragDropEffects.Copy);
             }
             else
             {
-                // Single player drag
                 selectedPlayers.Clear();
-                RefreshTeamPlayersPanel();
+                RefreshTeamPlayersPanelAsync();
                 var sourceControl = sender as Control;
                 sourceControl?.DoDragDrop(player, DragDropEffects.Copy);
             }
@@ -481,7 +501,6 @@ public partial class FavForm : Form
 
     private void PnlFavPlayers_DragEnter(object sender, DragEventArgs e)
     {
-        // Check if the dragged data is a StartingEleven player or a list of players
         if (e.Data.GetDataPresent(typeof(StartingEleven)) ||
             e.Data.GetDataPresent(typeof(List<StartingEleven>)))
         {
@@ -495,15 +514,12 @@ public partial class FavForm : Form
 
     private void PnlFavPlayers_DragDrop(object sender, DragEventArgs e)
     {
-        // Handle multiple players
         if (e.Data.GetData(typeof(List<StartingEleven>)) is List<StartingEleven> players)
         {
             AddMultipleToFavorites(players);
-            // Clear selection after successful drop
             selectedPlayers.Clear();
-            RefreshTeamPlayersPanel();
+            RefreshTeamPlayersPanelAsync();
         }
-        // Handle single player
         else if (e.Data.GetData(typeof(StartingEleven)) is StartingEleven player)
         {
             AddToFavorites(player);
@@ -517,7 +533,6 @@ public partial class FavForm : Form
 
         foreach (var player in players)
         {
-            // Check if player is already in favorites
             if (favoritePlayersList.Any(p => p.Name.Equals(player.Name, StringComparison.OrdinalIgnoreCase) &&
                                              p.ShirtNumber == player.ShirtNumber))
             {
@@ -525,7 +540,6 @@ public partial class FavForm : Form
                 continue;
             }
 
-            // Check if adding this player would exceed the limit
             if (favoritePlayersList.Count + playersToAdd.Count >= 3)
             {
                 break;
@@ -534,7 +548,6 @@ public partial class FavForm : Form
             playersToAdd.Add(player);
         }
 
-        // Check if we can add any players
         if (favoritePlayersList.Count + playersToAdd.Count > 3)
         {
             var remainingSlots = 3 - favoritePlayersList.Count;
@@ -552,10 +565,8 @@ public partial class FavForm : Form
             }
         }
 
-        // Add the players
         favoritePlayersList.AddRange(playersToAdd);
 
-        // Show feedback
         if (playersToAdd.Count > 0)
         {
             var message = $"Added {playersToAdd.Count} player(s) to favorites";
@@ -572,16 +583,19 @@ public partial class FavForm : Form
                             "Duplicate Players", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        RefreshFavoritePlayersPanel();
-        RefreshTeamPlayersPanel();
+        RefreshFavoritePlayersPanelAsync();
+        RefreshTeamPlayersPanelAsync();
         SaveFavouritePlayersAsync();
     }
 
     private void AddToFavorites(StartingEleven player)
     {
-        if (favoritePlayersList.Count >= 3) // Maximum 3 favourite players
+        // todo try catch
+
+        if (favoritePlayersList.Count >= 3)
         {
-            MessageBox.Show("You can only have a maximum of 3 favourite players!", "Maximum Reached",
+            MessageBox.Show($"{resourceManager.GetString("Max_three_fav_players")}", 
+                            $"{resourceManager.GetString("Max_reached")}",
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;
         }
@@ -590,126 +604,102 @@ public partial class FavForm : Form
                                           p.ShirtNumber == player.ShirtNumber))
         {
             favoritePlayersList.Add(player);
-            RefreshFavoritePlayersPanel();
-            RefreshTeamPlayersPanel(); // Refresh team panel to update visual indicators
-            SaveFavouritePlayersAsync(); // Save to file
+            RefreshFavoritePlayersPanelAsync();
+            RefreshTeamPlayersPanelAsync();
+            SaveFavouritePlayersAsync(); 
         }
         else
         {
-            MessageBox.Show($"{player.Name} is already in your favorites!", "Duplicate Player",
+            MessageBox.Show($"{player.Name} {resourceManager.GetString("Player_already_in_fav")}", 
+                            $"{resourceManager.GetString("Duplicate_player")}",
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 
-    private void RemoveFromFavorites(StartingEleven player)
+    private async void RemoveFromFavorites(StartingEleven player)
     {
-        var result = MessageBox.Show($"Remove {player.Name} from favorites?", "Confirm Removal",
-                                     MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-        if (result == DialogResult.Yes)
+        //todo localize
+        try
         {
-            favoritePlayersList.RemoveAll(p => p.Name.Equals(player.Name, StringComparison.OrdinalIgnoreCase) &&
-                                               p.ShirtNumber == player.ShirtNumber);
-            RefreshFavoritePlayersPanel();
-            RefreshTeamPlayersPanel();
-            SaveFavouritePlayersAsync();
+            var result = MessageBox.Show($"{resourceManager.GetString("Remove_player_from_favs")} ({player.Name})", 
+                                         $"{resourceManager.GetString("Confirm_removal")}",
+                                         MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (result == DialogResult.Yes)
+            {
+                favoritePlayersList.RemoveAll(p => p.Name.Equals(player.Name, StringComparison.OrdinalIgnoreCase) &&
+                                                   p.ShirtNumber == player.ShirtNumber);
+                await RefreshFavoritePlayersPanelAsync();
+                await RefreshTeamPlayersPanelAsync();
+                await SaveFavouritePlayersAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Error removing player from favorites: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
-    private void RefreshFavoritePlayersPanel()
+    private async Task RefreshFavoritePlayersPanelAsync()
     {
         if (favoritePlayersList.Any())
         {
-            PopulatePlayersPanel(pnlFavPlayers, favoritePlayersList);
+            await PopulatePlayersPanelAsync(pnlFavPlayers, favoritePlayersList);
         }
         else
         {
             pnlFavPlayers.Controls.Clear();
-            Label emptyLabel = new Label
-                               {
-                                   Text = "Drag (or hold Ctrl) players here to add to favorites\n\n(Double-click favorite players to remove)\n\nMaximum: 3 players",
-                                   Location = new Point(10, 10),
-                                   Size = new Size(300, 100),
-                                   Font = new Font("Arial", 9),
-                                   ForeColor = Color.Gray,
-                                   TextAlign = ContentAlignment.MiddleCenter
-                               };
+            var emptyLabel = new Label
+                             {
+                                 Text = $"{resourceManager.GetString("Fav_panel_info")}",
+                                 Location = new Point(10, 10),
+                                 Size = new Size(300, 100),
+                                 Font = new Font("Arial", 9),
+                                 ForeColor = Color.Gray,
+                                 TextAlign = ContentAlignment.MiddleCenter
+                             };
             pnlFavPlayers.Controls.Add(emptyLabel);
         }
     }
 
-    private void RefreshTeamPlayersPanel()
+    private async void cmbTeams_SelectedIndexChanged_1(object sender, EventArgs e)
     {
-        if (cmbTeams.SelectedItem is Teams selectedTeam)
-        {
-            LoadTeamPlayersAsync(selectedTeam.FifaCode);
-        }
-    }
-
-    private void cmbTeams_SelectedIndexChanged_1(object sender, EventArgs e)
-    {
+        // todo try catch
         selectedPlayers.Clear();
+        await RefreshTeamPlayersPanelAsync();
+    }
 
-        if (cmbTeams.SelectedItem is Teams selectedTeam)
+    protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+    {
+        switch (keyData)
         {
-            LoadTeamPlayersAsync(selectedTeam.FifaCode);
+            case Keys.Enter:
+            case Keys.Escape:
+                ConfirmAndClose();
+                return true;
+            default:
+                return base.ProcessCmdKey(ref msg, keyData);
         }
     }
 
-    private async void LoadTeamsAsync()
+    private async void btnSettings_Click(object sender, EventArgs e)
     {
-        try
+        // todo try catch
+        var settingsForm = new SettingsForm(state);
+        var result = settingsForm.ShowDialog();
+
+        if (result == DialogResult.OK || result == DialogResult.Cancel)
         {
-            cmbTeams.Items.Clear();
-            cmbTeams.DisplayMember = "Country";
-            cmbTeams.ValueMember = "FifaCode";
+            await SaveCurrentSettingsAsync();
 
-            var teams = await repository.GetTeams(state.SelectedGender);
-            var sortedTeams = teams.OrderBy(t => t.Country).ToArray();
-
-            cmbTeams.Items.AddRange(sortedTeams.Cast<object>().ToArray());
-
-            if (cmbTeams.Items.Count > 0)
-            {
-                cmbTeams.SelectedIndex = 0;
-            }
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show($"Error loading teams: {ex.Message}", "Error",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+            await LoadTeamsAsync();
         }
     }
 
-    private async void LoadTeamPlayersAsync(string fifaCode)
+    private void btnRankings_Click(object sender, EventArgs e)
     {
-        try
-        {
-            var players = await repository.GetPlayersByTeamAsync(state.SelectedGender, fifaCode);
-
-            if (players?.Any() == true)
-            {
-                PopulatePlayersPanel(pnlTeamPlayers, players);
-            }
-            else
-            {
-                pnlTeamPlayers.Controls.Clear();
-                Label noPlayersLabel = new Label
-                                       {
-                                           Text = "No player data available for this team",
-                                           Location = new Point(10, 10),
-                                           Size = new Size(280, 30),
-                                           Font = new Font("Arial", 10),
-                                           ForeColor = Color.Gray
-                                       };
-                pnlTeamPlayers.Controls.Add(noPlayersLabel);
-            }
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show($"Error loading team players: {ex.Message}", "Error",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
+        state.SelectedFifaCode = (cmbTeams.SelectedItem as Teams)?.FifaCode ?? string.Empty;
+        new RankForm(state).ShowDialog();
     }
 
     protected override async void OnFormClosing(FormClosingEventArgs e)
@@ -747,39 +737,5 @@ public partial class FavForm : Form
         {
             Close();
         }
-    }
-
-    protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-    {
-        switch (keyData)
-        {
-            case Keys.Enter:
-            case Keys.Escape:
-                ConfirmAndClose();
-                return true;
-            default:
-                return base.ProcessCmdKey(ref msg, keyData);
-        }
-    }
-
-    private async void btnSettings_Click(object sender, EventArgs e)
-    {
-        var settingsForm = new SettingsForm(state);
-        var result = settingsForm.ShowDialog();
-
-        if (result == DialogResult.OK || result == DialogResult.Cancel)
-        {
-            UpdateStateLabel();
-
-            await SaveCurrentSettingsAsync();
-
-            LoadTeamsAsync();
-        }
-    }
-
-    private void btnRankings_Click(object sender, EventArgs e)
-    {
-        state.SelectedFifaCode = (cmbTeams.SelectedItem as Teams)?.FifaCode ?? string.Empty;
-        new RankForm(state).ShowDialog();
     }
 }

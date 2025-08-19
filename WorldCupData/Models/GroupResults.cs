@@ -2,7 +2,7 @@
 
 namespace DAL.Models;
 
-public partial class GroupResults
+public class GroupResults
 {
     [JsonPropertyName("id")]
     public long Id { get; set; }

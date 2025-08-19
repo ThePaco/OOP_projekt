@@ -2,7 +2,7 @@
 
 namespace DAL.Models;
 
-public partial class Team
+public class Team
 {
     [JsonPropertyName("country")]
     public string Country { get; set; }

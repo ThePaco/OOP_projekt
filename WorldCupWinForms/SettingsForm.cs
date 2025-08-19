@@ -18,8 +18,12 @@ public partial class SettingsForm : Form
     
     public SettingsForm(State state)
     {
-        InitializeComponent();
         this.state = state;
+        Thread.CurrentThread.CurrentUICulture = state.SelectedLanguage == Language.Croatian
+            ? new System.Globalization.CultureInfo("hr-HR")
+            : new System.Globalization.CultureInfo("en-US");
+
+        InitializeComponent();
 
         foreach (var control in gbLanguage.Controls)
         {
@@ -28,8 +32,10 @@ public partial class SettingsForm : Form
 
             rb.Checked = state.SelectedLanguage switch
             {
-                Language.Croatian => rb.Text == "Croatian",
-                Language.English => rb.Text == "English",
+                Language.Croatian => rb.Text == "Croatian" || rb.Text == "Hrvatski",
+
+                Language.English => rb.Text == "English" || rb.Text == "Engleski",
+
                 _ => throw new ArgumentOutOfRangeException()
             };
         }
@@ -41,8 +47,10 @@ public partial class SettingsForm : Form
 
             rb.Checked = state.SelectedGender switch
             {
-                Gender.Men => rb.Text == "Men",
-                Gender.Women => rb.Text == "Women",
+                Gender.Men => rb.Text == "Men" || rb.Text == "Muška liga",
+
+                Gender.Women => rb.Text == "Women" || rb.Text == "Ženska liga",
+
                 _ => throw new ArgumentOutOfRangeException()
             };
         }
@@ -54,7 +62,8 @@ public partial class SettingsForm : Form
 
             rb.Checked = state.SelectedSource switch
             {
-                DataSource.Local => rb.Text == "Local File",
+                DataSource.Local => rb.Text == "Local File" || rb.Text == "Datoteka na disku",
+
                 DataSource.Api => rb.Text == "Web Api",
                 _ => throw new ArgumentOutOfRangeException()
             };
@@ -75,13 +84,6 @@ public partial class SettingsForm : Form
                 return base.ProcessCmdKey(ref msg, keyData);
         }
     }
-
-    private void label1_Click(object sender, EventArgs e) { }
-
-    private void rb_CheckedChanged(object sender, EventArgs e) { }
-
-    private void btnCancel_Click(object sender, EventArgs e) => Close();
-
     private void btnSave_Click(object sender, EventArgs e)
     {
         foreach (var control in gbLanguage.Controls)
@@ -91,8 +93,8 @@ public partial class SettingsForm : Form
 
             state.SelectedLanguage = rb.Text switch
                 {
-                    "Croatian" => Language.Croatian,
-                    "English" => Language.English,
+                    "Croatian" or "Hrvatski" => Language.Croatian,
+                    "English" or "Engleski" => Language.English,
                     _ => throw new ArgumentOutOfRangeException()
                 }
                 ;
@@ -106,8 +108,8 @@ public partial class SettingsForm : Form
 
             state.SelectedGender = rb.Text switch
                 {
-                    "Men" => Gender.Men,
-                    "Women" => Gender.Women,
+                    "Men" or "Muška liga" => Gender.Men,
+                    "Women" or "Ženska liga" => Gender.Women,
                     _ => throw new ArgumentOutOfRangeException()
                 }
                 ;
@@ -121,7 +123,7 @@ public partial class SettingsForm : Form
 
             state.SelectedSource = rb.Text switch
                 {
-                    "Local File" => DataSource.Local,
+                    "Local File" or "Datoteka na disku" => DataSource.Local,
                     "Web Api" => DataSource.Api,
                     _ => throw new ArgumentOutOfRangeException()
                 }
@@ -131,4 +133,6 @@ public partial class SettingsForm : Form
 
         Close();
     }
+
+    private void btnCancel_Click(object sender, EventArgs e) => Close();
 }

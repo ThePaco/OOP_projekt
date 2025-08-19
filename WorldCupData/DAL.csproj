@@ -7,7 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="db\" />
+    <Compile Include="db\sqlite_db" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Images\" />
     <Folder Include="UserData\Images\" />
   </ItemGroup>

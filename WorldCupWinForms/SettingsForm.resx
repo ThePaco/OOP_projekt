@@ -117,4 +117,336 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="label1.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="label1.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 24pt</value>
+  </data>
+  <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>266, 38</value>
+  </data>
+  <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>249, 45</value>
+  </data>
+  <data name="label1.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="label1.Text" xml:space="preserve">
+    <value>Change settings</value>
+  </data>
+  <data name="&gt;&gt;label1.Name" xml:space="preserve">
+    <value>label1</value>
+  </data>
+  <data name="&gt;&gt;label1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="btnSave.Location" type="System.Drawing.Point, System.Drawing">
+    <value>266, 324</value>
+  </data>
+  <data name="btnSave.Size" type="System.Drawing.Size, System.Drawing">
+    <value>94, 41</value>
+  </data>
+  <data name="btnSave.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="btnSave.Text" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="&gt;&gt;btnSave.Name" xml:space="preserve">
+    <value>btnSave</value>
+  </data>
+  <data name="&gt;&gt;btnSave.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnSave.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;btnSave.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="btnCancel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>420, 324</value>
+  </data>
+  <data name="btnCancel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>94, 41</value>
+  </data>
+  <data name="btnCancel.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="btnCancel.Text" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="&gt;&gt;btnCancel.Name" xml:space="preserve">
+    <value>btnCancel</value>
+  </data>
+  <data name="&gt;&gt;btnCancel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnCancel.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;btnCancel.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="rbEng.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="rbEng.Location" type="System.Drawing.Point, System.Drawing">
+    <value>13, 27</value>
+  </data>
+  <data name="rbEng.Size" type="System.Drawing.Size, System.Drawing">
+    <value>63, 19</value>
+  </data>
+  <data name="rbEng.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="rbEng.Text" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="&gt;&gt;rbEng.Name" xml:space="preserve">
+    <value>rbEng</value>
+  </data>
+  <data name="&gt;&gt;rbEng.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbEng.Parent" xml:space="preserve">
+    <value>gbLanguage</value>
+  </data>
+  <data name="&gt;&gt;rbEng.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="rbCro.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="rbCro.Location" type="System.Drawing.Point, System.Drawing">
+    <value>13, 63</value>
+  </data>
+  <data name="rbCro.Size" type="System.Drawing.Size, System.Drawing">
+    <value>70, 19</value>
+  </data>
+  <data name="rbCro.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="rbCro.Text" xml:space="preserve">
+    <value>Croatian</value>
+  </data>
+  <data name="&gt;&gt;rbCro.Name" xml:space="preserve">
+    <value>rbCro</value>
+  </data>
+  <data name="&gt;&gt;rbCro.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbCro.Parent" xml:space="preserve">
+    <value>gbLanguage</value>
+  </data>
+  <data name="&gt;&gt;rbCro.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="gbLanguage.Location" type="System.Drawing.Point, System.Drawing">
+    <value>55, 122</value>
+  </data>
+  <data name="gbLanguage.Size" type="System.Drawing.Size, System.Drawing">
+    <value>200, 100</value>
+  </data>
+  <data name="gbLanguage.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="gbLanguage.Text" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="&gt;&gt;gbLanguage.Name" xml:space="preserve">
+    <value>gbLanguage</value>
+  </data>
+  <data name="&gt;&gt;gbLanguage.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbLanguage.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;gbLanguage.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="rbWomen.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="rbWomen.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 63</value>
+  </data>
+  <data name="rbWomen.Size" type="System.Drawing.Size, System.Drawing">
+    <value>67, 19</value>
+  </data>
+  <data name="rbWomen.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="rbWomen.Text" xml:space="preserve">
+    <value>Women</value>
+  </data>
+  <data name="&gt;&gt;rbWomen.Name" xml:space="preserve">
+    <value>rbWomen</value>
+  </data>
+  <data name="&gt;&gt;rbWomen.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbWomen.Parent" xml:space="preserve">
+    <value>gbCategory</value>
+  </data>
+  <data name="&gt;&gt;rbWomen.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="rbMen.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="rbMen.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 27</value>
+  </data>
+  <data name="rbMen.Size" type="System.Drawing.Size, System.Drawing">
+    <value>49, 19</value>
+  </data>
+  <data name="rbMen.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="rbMen.Text" xml:space="preserve">
+    <value>Men</value>
+  </data>
+  <data name="&gt;&gt;rbMen.Name" xml:space="preserve">
+    <value>rbMen</value>
+  </data>
+  <data name="&gt;&gt;rbMen.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbMen.Parent" xml:space="preserve">
+    <value>gbCategory</value>
+  </data>
+  <data name="&gt;&gt;rbMen.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="gbCategory.Location" type="System.Drawing.Point, System.Drawing">
+    <value>303, 122</value>
+  </data>
+  <data name="gbCategory.Size" type="System.Drawing.Size, System.Drawing">
+    <value>200, 100</value>
+  </data>
+  <data name="gbCategory.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="gbCategory.Text" xml:space="preserve">
+    <value>Gender Category</value>
+  </data>
+  <data name="&gt;&gt;gbCategory.Name" xml:space="preserve">
+    <value>gbCategory</value>
+  </data>
+  <data name="&gt;&gt;gbCategory.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbCategory.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;gbCategory.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="rbApi.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="rbApi.Location" type="System.Drawing.Point, System.Drawing">
+    <value>21, 63</value>
+  </data>
+  <data name="rbApi.Size" type="System.Drawing.Size, System.Drawing">
+    <value>70, 19</value>
+  </data>
+  <data name="rbApi.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="rbApi.Text" xml:space="preserve">
+    <value>Web Api</value>
+  </data>
+  <data name="&gt;&gt;rbApi.Name" xml:space="preserve">
+    <value>rbApi</value>
+  </data>
+  <data name="&gt;&gt;rbApi.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbApi.Parent" xml:space="preserve">
+    <value>gbSource</value>
+  </data>
+  <data name="&gt;&gt;rbApi.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="rbLocalFiles.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="rbLocalFiles.Location" type="System.Drawing.Point, System.Drawing">
+    <value>21, 25</value>
+  </data>
+  <data name="rbLocalFiles.Size" type="System.Drawing.Size, System.Drawing">
+    <value>74, 19</value>
+  </data>
+  <data name="rbLocalFiles.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="rbLocalFiles.Text" xml:space="preserve">
+    <value>Local File</value>
+  </data>
+  <data name="&gt;&gt;rbLocalFiles.Name" xml:space="preserve">
+    <value>rbLocalFiles</value>
+  </data>
+  <data name="&gt;&gt;rbLocalFiles.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbLocalFiles.Parent" xml:space="preserve">
+    <value>gbSource</value>
+  </data>
+  <data name="&gt;&gt;rbLocalFiles.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="gbSource.Location" type="System.Drawing.Point, System.Drawing">
+    <value>552, 122</value>
+  </data>
+  <data name="gbSource.Size" type="System.Drawing.Size, System.Drawing">
+    <value>200, 100</value>
+  </data>
+  <data name="gbSource.TabIndex" type="System.Int32, mscorlib">
+    <value>11</value>
+  </data>
+  <data name="gbSource.Text" xml:space="preserve">
+    <value>Data Source</value>
+  </data>
+  <data name="&gt;&gt;gbSource.Name" xml:space="preserve">
+    <value>gbSource</value>
+  </data>
+  <data name="&gt;&gt;gbSource.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbSource.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;gbSource.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>7, 15</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>800, 450</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>SettingsForm</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>SettingsForm</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Form, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

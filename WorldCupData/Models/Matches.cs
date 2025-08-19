@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace DAL.Models;
 
-public partial class Matches
+public class Matches
 {
     [JsonPropertyName("venue")]
     public string Venue { get; set; }

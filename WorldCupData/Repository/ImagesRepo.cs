@@ -14,7 +14,7 @@ public class ImagesRepo : IImagesRepo
                 Directory.CreateDirectory(IMAGES_FOLDER_PATH);
             }
 
-            if (!fileName.EndsWith(".png", StringComparison.OrdinalIgnoreCase) 
+            if (!fileName.EndsWith(".png", StringComparison.OrdinalIgnoreCase)
                 && !fileName.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase)
                 && !fileName.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase))
             {
@@ -22,9 +22,9 @@ public class ImagesRepo : IImagesRepo
             }
 
             var filePath = Path.Combine(IMAGES_FOLDER_PATH, fileName);
-            
+
             await File.WriteAllBytesAsync(filePath, imageData);
-            
+
             return filePath;
         }
         catch (Exception ex)
@@ -35,29 +35,21 @@ public class ImagesRepo : IImagesRepo
 
     public async Task<byte[]> GetImageAsync(string fileName)
     {
-        try
-        {
-            var filePath = Path.Combine(IMAGES_FOLDER_PATH, fileName);
-            filePath = File.Exists(filePath + ".png") ? filePath + ".png" : filePath + ".jpg";
+        var filePath = Path.Combine(IMAGES_FOLDER_PATH, fileName);
+        filePath = File.Exists(filePath + ".png") ? filePath + ".png" : filePath + ".jpg";
 
-            if (File.Exists(filePath))
-            {
-
-                return await File.ReadAllBytesAsync(filePath);
-            }
-            
-            if (File.Exists(DEFAULT_IMAGE_PATH))
-            {
-                return await File.ReadAllBytesAsync(DEFAULT_IMAGE_PATH);
-            }
-            
-            //ovo se ne bi trebalo nikad dogoditi
-            throw new FileNotFoundException($"No '{fileName}' nor default image found. Directory error. Check the file paths in DAL");
-        }
-        catch (Exception ex) when (!(ex is FileNotFoundException))
+        if (File.Exists(filePath))
         {
-            throw new InvalidOperationException($"Failed to get image: {ex.Message}", ex);
+            return await File.ReadAllBytesAsync(filePath);
         }
+
+        if (File.Exists(DEFAULT_IMAGE_PATH))
+        {
+            return await File.ReadAllBytesAsync(DEFAULT_IMAGE_PATH);
+        }
+
+        //ovo se ne bi trebalo nikad dogoditi
+        throw new InvalidOperationException($"No '{fileName}' nor default image found. Directory error. Check the file paths in DAL");
     }
 
     public async Task RemoveImageAsync(string fileName)
@@ -65,7 +57,7 @@ public class ImagesRepo : IImagesRepo
         try
         {
             var filePath = Path.Combine(IMAGES_FOLDER_PATH, fileName);
-            
+
             if (File.Exists(filePath))
             {
                 File.Delete(filePath);

@@ -285,12 +285,18 @@
     <value>System.Windows.Forms.Form, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="ComboRankItem_1" xml:space="preserve">
-    <value>this is one</value>
+    <value>Players by goals scored</value>
   </data>
   <data name="ComboRankItem_3" xml:space="preserve">
-    <value>this is three</value>
+    <value>Matches by attendance</value>
   </data>
   <data name="ComboRankItem_2" xml:space="preserve">
-    <value>this is two</value>
+    <value>Players by yellow cards</value>
+  </data>
+  <data name="RankForm_Please_select_a_category" xml:space="preserve">
+    <value>Please select a category.</value>
+  </data>
+  <data name="No_data_to_export" xml:space="preserve">
+    <value>No data to export.</value>
   </data>
 </root>

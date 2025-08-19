@@ -41,7 +41,6 @@ partial class FavForm
         lblSettings = new Label();
         btnSettings = new Button();
         btnRankings = new Button();
-        lblState = new Label();
         SuspendLayout();
         // 
         // lblSelection
@@ -112,16 +111,10 @@ partial class FavForm
         btnRankings.UseVisualStyleBackColor = true;
         btnRankings.Click += btnRankings_Click;
         // 
-        // lblState
-        // 
-        resources.ApplyResources(lblState, "lblState");
-        lblState.Name = "lblState";
-        // 
         // FavForm
         // 
         resources.ApplyResources(this, "$this");
         AutoScaleMode = AutoScaleMode.Font;
-        Controls.Add(lblState);
         Controls.Add(btnRankings);
         Controls.Add(btnSettings);
         Controls.Add(lblSettings);
@@ -153,5 +146,4 @@ partial class FavForm
     private Label lblSettings;
     private Button btnSettings;
     private Button btnRankings;
-    private Label lblState;
 }
