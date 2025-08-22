@@ -55,7 +55,7 @@ public partial class FavForm : Form
                                               Language = Language.English,
                                               Gender = Gender.Men,
                                               DataSource = DataSource.Local,
-                                              Resolution = Resolution.w1080_h1920
+                                              Resolution = Resolution.w1920_h1080
                                           };
                     ApplySettingsToState(defaultSettings);
                 }
@@ -65,6 +65,7 @@ public partial class FavForm : Form
             else
             {
                 await LoadUserSettingsAsync();
+                cmbTeams.SelectedItem = state.FifaCode;
             }
 
             await LoadTeamsAsync();
@@ -114,6 +115,7 @@ public partial class FavForm : Form
         state.SelectedLanguage = userSettings.Language;
         state.SelectedGender = userSettings.Gender;
         state.SelectedSource = userSettings.DataSource;
+        state.FifaCode = userSettings.FifaCode;
 
         UpdateForm();
     }
@@ -125,8 +127,9 @@ public partial class FavForm : Form
                                Language = state.SelectedLanguage,
                                Gender = state.SelectedGender,
                                DataSource = state.SelectedSource,
-                               Resolution = Resolution.w1080_h1920 // not needed in forms
-                           };
+                               Resolution = Resolution.w1920_h1080, // unused in forms
+                               FifaCode = (cmbTeams.SelectedItem as Teams)?.FifaCode ?? string.Empty
+        };
 
         return settingsRepository.SaveUserSettingsAsync(userSettings);
     }
@@ -154,6 +157,7 @@ public partial class FavForm : Form
 
         if (cmbTeams.Items.Count > 0)
         {
+            //todo select team from favourites here
             cmbTeams.SelectedIndex = 0;
         }
     }
@@ -307,7 +311,6 @@ public partial class FavForm : Form
     {
         var contextMenu = new ContextMenuStrip();
 
-        //todo localize
         if (!isFavoritePanel)
         {
             if (isInFavorites)
@@ -349,30 +352,28 @@ public partial class FavForm : Form
     {
         try
         {
-            using (var openFileDialog = new OpenFileDialog())
+            using var openFileDialog = new OpenFileDialog();
+            openFileDialog.Title = $"{resourceManager.GetString("Select_img_for")} {player.Name}";
+            openFileDialog.Filter = "Image Files (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png";
+            openFileDialog.FilterIndex = 1;
+            openFileDialog.RestoreDirectory = true;
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                openFileDialog.Title = $"{resourceManager.GetString("Select_img_for")} {player.Name}";
-                openFileDialog.Filter = "Image Files (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png";
-                openFileDialog.FilterIndex = 1;
-                openFileDialog.RestoreDirectory = true;
+                var imageData = await File.ReadAllBytesAsync(openFileDialog.FileName);
+                var extension = Path.GetExtension(openFileDialog.FileName).ToLower();
+                if (extension == ".jpeg")
+                    extension = ".jpg";
+                var fileName = $"{player.Name}{extension}";
 
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    var imageData = await File.ReadAllBytesAsync(openFileDialog.FileName);
-                    var extension = Path.GetExtension(openFileDialog.FileName).ToLower();
-                    if (extension == ".jpeg")
-                        extension = ".jpg";
-                    var fileName = $"{player.Name}{extension}";
+                await imagesRepository.UploadImageAsync(imageData, fileName);
 
-                    await imagesRepository.UploadImageAsync(imageData, fileName);
+                MessageBox.Show($"{resourceManager.GetString("Add_change_img")} {player.Name}!",
+                                $"{resourceManager.GetString("Img_added")}",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    MessageBox.Show($"{resourceManager.GetString("Add_change_img")} {player.Name}!",
-                                    $"{resourceManager.GetString("Img_added")}",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                    RefreshFavoritePlayersPanelAsync();
-                    RefreshTeamPlayersPanelAsync();
-                }
+                RefreshFavoritePlayersPanelAsync();
+                RefreshTeamPlayersPanelAsync();
             }
         }
         catch (Exception ex)
@@ -384,7 +385,6 @@ public partial class FavForm : Form
 
     private async Task RemovePlayerImageAsync(StartingEleven player)
     {
-        //todo localize
         try
         {
             var result = MessageBox.Show($"{resourceManager.GetString("Remove_img_for")} {player.Name}?", 
@@ -553,7 +553,9 @@ public partial class FavForm : Form
             var remainingSlots = 3 - favoritePlayersList.Count;
             if (remainingSlots > 0)
             {
-                playersToAdd = playersToAdd.Take(remainingSlots).ToList();
+                playersToAdd = [];
+                foreach (var eleven in playersToAdd.Take(remainingSlots))
+                    playersToAdd.Add(eleven);
                 MessageBox.Show($"Only {remainingSlots} slots remaining. Added first {remainingSlots} selected players.",
                                 "Favorites Limit", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -618,7 +620,6 @@ public partial class FavForm : Form
 
     private async void RemoveFromFavorites(StartingEleven player)
     {
-        //todo localize
         try
         {
             var result = MessageBox.Show($"{resourceManager.GetString("Remove_player_from_favs")} ({player.Name})", 
@@ -698,7 +699,7 @@ public partial class FavForm : Form
 
     private void btnRankings_Click(object sender, EventArgs e)
     {
-        state.SelectedFifaCode = (cmbTeams.SelectedItem as Teams)?.FifaCode ?? string.Empty;
+        state.FifaCode = (cmbTeams.SelectedItem as Teams)?.FifaCode ?? string.Empty;
         new RankForm(state).ShowDialog();
     }
 

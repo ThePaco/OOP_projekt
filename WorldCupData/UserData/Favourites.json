@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Nahuel GUZMAN",
+    "captain": false,
+    "shirt_number": 1,
+    "position": "Goalie"
+  },
+  {
+    "name": "Lionel MESSI",
+    "captain": true,
+    "shirt_number": 10,
+    "position": "Forward"
+  }
+]

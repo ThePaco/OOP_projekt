@@ -10,4 +10,5 @@ public interface IMatchDataRepo
     public Task<IEnumerable<Teams>> GetTeams(Gender gender);
     public Task<IEnumerable<Teams>> GetTeamsByFifaCodeAsync(Gender gender, string fifaCode);
     public Task<IEnumerable<StartingEleven>> GetPlayersByTeamAsync(Gender gender, string fifaCode);
+    public Task<Results> GetTeamStats(Gender gender, string fifaCode);
 }

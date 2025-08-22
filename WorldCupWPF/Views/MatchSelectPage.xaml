@@ -1,0 +1,82 @@
+﻿<Page x:Class="WorldCupWPF.Views.MatchSelectPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WorldCupWPF.Views"
+      mc:Ignorable="d" 
+      d:DesignHeight="720" d:DesignWidth="900"
+      Title="MatchSelectPage">
+
+    <Grid>
+        <ComboBox x:Name="cbHomeTeam" 
+                  Margin="196,98,0,0"
+                  ItemsSource="{Binding Teams}"
+                  DisplayMemberPath="Country"
+                  SelectedValuePath="FifaCode" HorizontalAlignment="Left" Width="167" Height="37" VerticalAlignment="Top" SelectionChanged="cbHomeTeam_SelectionChanged"/>
+        <ComboBox x:Name="cbOpposingTeam" 
+                  Margin="0,98,196,0"
+                  ItemsSource="{Binding TeamsOpposing}"
+                  DisplayMemberPath="Country"
+                  SelectedValuePath="FifaCode" HorizontalAlignment="Right" Width="167" Height="37" VerticalAlignment="Top" SelectionChanged="cbOpposingTeam_SelectionChanged"/>
+        <Label x:Name="lblVS" Content="VS" HorizontalAlignment="Center" Margin="0,88,0,0" VerticalAlignment="Top" FontFamily="Arial Black" FontSize="36"/>
+        <Label x:Name="lbChooseMatch" Content="Choose a match" HorizontalAlignment="Center" Margin="0,58,0,0" VerticalAlignment="Top" FontSize="20"/>
+        <Button x:Name="btnDetails" Content="Match Details" HorizontalAlignment="Center" Margin="0,671,0,0" VerticalAlignment="Top" Height="46" Width="100" FontSize="16" Click="btnDetails_Click"/>
+        <Button x:Name="btnSettings" Content="Settings" HorizontalAlignment="Center" Margin="743,10,0,0" VerticalAlignment="Top" Click="btnSettings_Click"/>
+        <Image x:Name="imgField" HorizontalAlignment="Center" Height="526" Margin="0,140,0,0" VerticalAlignment="Top" Width="880" Source="/Views/Field.png"/>
+
+        <!-- Player Grid Overlay -->
+        <Grid x:Name="PlayerGrid" HorizontalAlignment="Center" Height="454" Margin="0,140,0,0" VerticalAlignment="Top" Width="731">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <!-- Forward -->
+                <RowDefinition Height="*"/>
+                <!-- Midfield -->
+                <RowDefinition Height="*"/>
+                <!-- Defender -->
+                <RowDefinition Height="0.6*"/>
+                <!-- Goalie -->
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <!-- Home Team Left Side -->
+                <ColumnDefinition Width="*"/>
+                <!-- Opposing Team Right Side -->
+            </Grid.ColumnDefinitions>
+
+            <!-- Home Team (Left Half) -->
+            <!-- Home Forward Positions -->
+            <StackPanel x:Name="HomeForwardPositions" Grid.Row="0" Grid.Column="0" 
+                       Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+            <!-- Home Midfield Positions -->
+            <StackPanel x:Name="HomeMidfieldPositions" Grid.Row="1" Grid.Column="0" 
+                       Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+            <!-- Home Defender Positions -->
+            <StackPanel x:Name="HomeDefenderPositions" Grid.Row="2" Grid.Column="0" 
+                       Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+            <!-- Home Goalie Position -->
+            <StackPanel x:Name="HomeGoaliePosition" Grid.Row="3" Grid.Column="0" 
+                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+            <!-- Opposing Team (Right Half) -->
+            <!-- Opposing Forward Positions -->
+            <StackPanel x:Name="OpposingForwardPositions" Grid.Row="0" Grid.Column="1" 
+                       Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+            <!-- Opposing Midfield Positions -->
+            <StackPanel x:Name="OpposingMidfieldPositions" Grid.Row="1" Grid.Column="1" 
+                       Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+            <!-- Opposing Defender Positions -->
+            <StackPanel x:Name="OpposingDefenderPositions" Grid.Row="2" Grid.Column="1" 
+                       Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+            <!-- Opposing Goalie Position -->
+            <StackPanel x:Name="OpposingGoaliePosition" Grid.Row="3" Grid.Column="1" 
+                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Grid>
+    </Grid>
+</Page>

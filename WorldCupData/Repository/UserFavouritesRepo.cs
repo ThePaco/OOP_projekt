@@ -5,7 +5,7 @@ namespace DAL.Repository;
 
 public class UserFavouritesRepo : IUserFavouritesRepo
 {
-    private const string FAVOURITES_FILE_PATH = @"UserData\Favourites.json";
+    private const string FAVOURITES_FILE_PATH = @"..\..\..\..\WorldCupData\UserData\Favourites.json";
 
     public async Task<IEnumerable<StartingEleven>> GetFavouritePlayersAsync()
     {
@@ -41,7 +41,6 @@ public class UserFavouritesRepo : IUserFavouritesRepo
     {
         try
         {
-            // Ensure directory exists
             var directory = Path.GetDirectoryName(FAVOURITES_FILE_PATH);
             if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
             {

@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorldCupWPF", "WorldCupWPF\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "WorldCupData\DAL.csproj", "{189DAB17-3EB2-4563-BC7A-AAB949A23EE9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing", "Testing\Testing.csproj", "{009B92CD-E0DB-4CCA-B8BB-C00F4BF6AC03}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{189DAB17-3EB2-4563-BC7A-AAB949A23EE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{189DAB17-3EB2-4563-BC7A-AAB949A23EE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{189DAB17-3EB2-4563-BC7A-AAB949A23EE9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{009B92CD-E0DB-4CCA-B8BB-C00F4BF6AC03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{009B92CD-E0DB-4CCA-B8BB-C00F4BF6AC03}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{009B92CD-E0DB-4CCA-B8BB-C00F4BF6AC03}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{009B92CD-E0DB-4CCA-B8BB-C00F4BF6AC03}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

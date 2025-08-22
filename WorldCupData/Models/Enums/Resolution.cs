@@ -3,7 +3,7 @@
 public enum Resolution
 {
     Fullscreen,
-    w1080_h1920,
-    w720_h1280,
-    w480_h854,
+    w1920_h1080,
+    w1280_h720,
+    w900_h720
 }

@@ -1,5 +1,7 @@
 ﻿using DAL.Models;
 using DAL.Models.Enums;
+using System.IO;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace DAL.Repository;
@@ -73,7 +75,7 @@ public class RemoteMatchDataRepo : IMatchDataRepo
                             players.AddRange(match.HomeTeamStatistics.Substitutes);
                         }
 
-                        break; // Found players for this team
+                        break;
                     }
 
                     // Check away team
@@ -86,7 +88,7 @@ public class RemoteMatchDataRepo : IMatchDataRepo
                             players.AddRange(match.AwayTeamStatistics.Substitutes);
                         }
 
-                        break; // Found players for this team
+                        break;
                     }
                 }
 
@@ -98,4 +100,27 @@ public class RemoteMatchDataRepo : IMatchDataRepo
             }
         }
     }
-}
+    public async Task<Results> GetTeamStats(Gender gender, string fifaCode)
+    {
+
+            using (HttpClient client = new HttpClient())
+            {
+                var res =
+                    await client.GetAsync($"https://worldcup-vua.nullbit.hr/men/{gender.ToString()}/results");
+
+                if (res.IsSuccessStatusCode)
+                {
+                    var jsonContent = await res.Content.ReadAsStringAsync();
+                    var allResults = JsonSerializer.Deserialize<List<Results>>(jsonContent);
+                    return allResults?.FirstOrDefault(r => r.FifaCode.Equals(fifaCode, StringComparison.OrdinalIgnoreCase));
+                }
+                else
+                {
+                    throw new Exception($"Failed to fetch team stats: {res.ReasonPhrase}");
+            }
+        }
+
+        }
+
+    }
+

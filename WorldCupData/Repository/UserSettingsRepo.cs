@@ -10,7 +10,7 @@ using DAL.Models.Enums;
 namespace DAL.Repository;
 public class UserSettingsRepo : IUserSettingsRepo
 {
-    private const string SETTINGS_FILE_PATH = @"UserData\Settings.json";
+    private const string SETTINGS_FILE_PATH = @"..\..\..\..\WorldCupData\UserData\Settings.json";
 
     public async Task<UserSettings> GetUserSettingsAsync()
     {
@@ -94,7 +94,8 @@ public class UserSettingsRepo : IUserSettingsRepo
             Language = Language.English,
             Gender = Gender.Men,
             DataSource = DataSource.Local,
-            Resolution = Resolution.w1080_h1920
+            Resolution = Resolution.w1920_h1080,
+            FifaCode = null
         };
     }
 }

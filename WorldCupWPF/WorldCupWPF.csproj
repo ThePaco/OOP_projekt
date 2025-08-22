@@ -8,4 +8,18 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Views\Field.png" />
+    <None Remove="Windows\Gear.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WorldCupData\DAL.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Views\Field.png" />
+    <Resource Include="Windows\Gear.png" />
+  </ItemGroup>
+
 </Project>

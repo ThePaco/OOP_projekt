@@ -18,15 +18,15 @@ public partial class RankForm : Form
     {
         this.state = state;
         Thread.CurrentThread.CurrentUICulture = state.SelectedLanguage == Language.Croatian
-                                                    ? new CultureInfo("hr-HR") 
+                                                    ? new("hr-HR") 
                                                     : new CultureInfo("en-US");
 
         InitializeComponent();
 
-        resourceManager = new ResourceManager($"{typeof(RankForm).FullName}", typeof(RankForm).Assembly);
+        resourceManager = new($"{typeof(RankForm).FullName}", typeof(RankForm).Assembly);
 
         cmbCategory.DataSource = ComboRankingItems.GetItemsForLanguage(resourceManager);
-        matchDataDataRepo = new LocalMatchDataRepo();
+        matchDataDataRepo = new();
     }
 
     private void btnRank_Click(object sender, EventArgs e) => DisplayRankingsAsync(cmbCategory);
@@ -54,13 +54,13 @@ public partial class RankForm : Form
                 foreach (var match in allMatches)
                 {
                     // home check
-                    if (match.HomeTeam?.Code?.Equals(state.SelectedFifaCode, StringComparison.OrdinalIgnoreCase) == true)
+                    if (match.HomeTeam?.Code?.Equals(state.FifaCode, StringComparison.OrdinalIgnoreCase) == true)
                     {
                         CountGoalsFromEvents(match.HomeTeamEvents, playerGoals);
                     }
 
                     // away check
-                    if (match.AwayTeam?.Code?.Equals(state.SelectedFifaCode, StringComparison.OrdinalIgnoreCase) == true)
+                    if (match.AwayTeam?.Code?.Equals(state.FifaCode, StringComparison.OrdinalIgnoreCase) == true)
                     {
                         CountGoalsFromEvents(match.AwayTeamEvents, playerGoals);
                     }
@@ -69,7 +69,7 @@ public partial class RankForm : Form
                 var sortedPlayers = playerGoals.OrderByDescending(p => p.Value).ToList();
                 if (sortedPlayers.Any())
                 {
-                    lbRankResults.Items.Add($"Goals ranking for {state.SelectedFifaCode}:");
+                    lbRankResults.Items.Add($"Goals ranking for {state.FifaCode}:");
                     lbRankResults.Items.Add("".PadRight(40, '-'));
 
                     for (int i = 0; i < sortedPlayers.Count; i++)
@@ -82,7 +82,7 @@ public partial class RankForm : Form
                 }
                 else
                 {
-                    lbRankResults.Items.Add($"No goal data found for team {state.SelectedFifaCode}");
+                    lbRankResults.Items.Add($"No goal data found for team {state.FifaCode}");
                 }
             }
             catch (Exception ex)
@@ -102,13 +102,13 @@ public partial class RankForm : Form
                 foreach (var match in allMatches)
                 {
                     // home check
-                    if (match.HomeTeam?.Code?.Equals(state.SelectedFifaCode, StringComparison.OrdinalIgnoreCase) == true)
+                    if (match.HomeTeam?.Code?.Equals(state.FifaCode, StringComparison.OrdinalIgnoreCase) == true)
                     {
                         CountYellowCardsFromEvents(match.HomeTeamEvents, playerYellowCards);
                     }
 
                     // away check
-                    if (match.AwayTeam?.Code?.Equals(state.SelectedFifaCode, StringComparison.OrdinalIgnoreCase) == true)
+                    if (match.AwayTeam?.Code?.Equals(state.FifaCode, StringComparison.OrdinalIgnoreCase) == true)
                     {
                         CountYellowCardsFromEvents(match.AwayTeamEvents, playerYellowCards);
                     }
@@ -117,7 +117,7 @@ public partial class RankForm : Form
                 var sortedPlayers = playerYellowCards.OrderByDescending(p => p.Value).ToList();
                 if (sortedPlayers.Any())
                 {
-                    lbRankResults.Items.Add($"Yellow cards ranking for {state.SelectedFifaCode}:");
+                    lbRankResults.Items.Add($"Yellow cards ranking for {state.FifaCode}:");
                     lbRankResults.Items.Add("".PadRight(40, '-'));
 
                     for (int i = 0; i < sortedPlayers.Count; i++)
@@ -130,7 +130,7 @@ public partial class RankForm : Form
                 }
                 else
                 {
-                    lbRankResults.Items.Add($"No yellow card data found for team {state.SelectedFifaCode}");
+                    lbRankResults.Items.Add($"No yellow card data found for team {state.FifaCode}");
                 }
             }
             catch (Exception ex)
@@ -148,15 +148,15 @@ public partial class RankForm : Form
 
                 // Filter po timu (home/away)
                 var teamMatches = allMatches.Where(match =>
-                                                       (match.HomeTeam?.Code?.Equals(state.SelectedFifaCode, StringComparison.OrdinalIgnoreCase) == true) ||
-                                                       (match.AwayTeam?.Code?.Equals(state.SelectedFifaCode, StringComparison.OrdinalIgnoreCase) == true))
+                                                       (match.HomeTeam?.Code?.Equals(state.FifaCode, StringComparison.OrdinalIgnoreCase) == true) ||
+                                                       (match.AwayTeam?.Code?.Equals(state.FifaCode, StringComparison.OrdinalIgnoreCase) == true))
                                             .ToList();
 
                 if (teamMatches.Any())
                 {
                     var sortedMatches = teamMatches.OrderByDescending(m => m.Attendance).ToList();
 
-                    lbRankResults.Items.Add($"Matches by attendance for {state.SelectedFifaCode}:");
+                    lbRankResults.Items.Add($"Matches by attendance for {state.FifaCode}:");
 
                     for (int i = 0; i < sortedMatches.Count; i++)
                     {
@@ -175,7 +175,7 @@ public partial class RankForm : Form
                 }
                 else
                 {
-                    lbRankResults.Items.Add($"No match data found for team {state.SelectedFifaCode}");
+                    lbRankResults.Items.Add($"No match data found for team {state.FifaCode}");
                 }
             }
             catch (Exception ex)
@@ -249,19 +249,17 @@ public partial class RankForm : Form
                 return;
             }
 
-            PrintDocument printDoc = new PrintDocument();
+            PrintDocument printDoc = new();
 
             printDoc.DocumentName = "Rankings Report";
             printDoc.PrintPage += (sender, e) => PrintPage_Handler(sender, e, listBox);
 
-            using (PrintDialog printDialog = new PrintDialog())
-            {
-                printDialog.Document = printDoc;
-                printDialog.UseEXDialog = true;
-                printDialog.Document.DocumentName = $"Rankings_{state.SelectedFifaCode}_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
+            using PrintDialog printDialog = new();
+            printDialog.Document = printDoc;
+            printDialog.UseEXDialog = true;
+            printDialog.Document.DocumentName = $"Rankings_{state.FifaCode}_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
 
-                printDoc.Print();
-            }
+            printDoc.Print();
         }
         catch (Exception ex)
         {
@@ -276,8 +274,8 @@ public partial class RankForm : Form
         {
             // stylizing 
             Graphics graphics = e.Graphics;
-            Font titleFont = new Font("Arial", 16, FontStyle.Bold);
-            Font contentFont = new Font("Arial", 10, FontStyle.Regular);
+            Font titleFont = new("Arial", 16, FontStyle.Bold);
+            Font contentFont = new("Arial", 10, FontStyle.Regular);
             Brush blackBrush = Brushes.Black;
             Brush grayBrush = Brushes.Gray;
             float yPosition = 50;
@@ -292,7 +290,7 @@ public partial class RankForm : Form
             yPosition += titleSize.Height + 20;
 
             // metadata
-            var metadata = $"Team: {state.SelectedFifaCode} | Gender: {state.SelectedGender} | Date: {DateTime.Now:yyyy-MM-dd HH:mm}";
+            var metadata = $"Team: {state.FifaCode} | Gender: {state.SelectedGender} | Date: {DateTime.Now:yyyy-MM-dd HH:mm}";
             graphics.DrawString(metadata, contentFont, grayBrush, leftMargin, yPosition);
             yPosition += 40;
 
@@ -321,9 +319,9 @@ public class ComboRankingItems
     {
         return
         [
-            new ComboRankingItems { Id = RankType.Goals, Text = resourceManager.GetString("ComboRankItem_1")! },
-            new ComboRankingItems { Id = RankType.YellowCards, Text = resourceManager.GetString("ComboRankItem_2")! },
-            new ComboRankingItems { Id = RankType.Attendance, Text = resourceManager.GetString("ComboRankItem_3")! }
+            new() { Id = RankType.Goals, Text = resourceManager.GetString("ComboRankItem_1")! },
+            new() { Id = RankType.YellowCards, Text = resourceManager.GetString("ComboRankItem_2")! },
+            new() { Id = RankType.Attendance, Text = resourceManager.GetString("ComboRankItem_3")! }
         ];
     }
 

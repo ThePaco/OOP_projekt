@@ -28,12 +28,11 @@ public class State
 
     public Gender SelectedGender { get; set; }
     public DataSource SelectedSource { get; set; }
-    public string SelectedFifaCode { get; set; }
+    public string? FifaCode { get; set; }
 }
 
 public static class Mapper
 {
-    // todo
     public static UserSettings ToUserSettings(this State state)
     {
         return new UserSettings

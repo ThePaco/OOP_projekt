@@ -6,7 +6,7 @@ namespace DAL.Repository;
 
 public class LocalMatchDataRepo : IMatchDataRepo
 {
-    public const string PATH = @"LocalMatchData\";
+    public const string PATH = @"..\..\..\..\WorldCupData\LocalMatchData\";
 
     public async Task<IEnumerable<Matches>> GetMatchesAsync(Gender gender)
     {
@@ -40,8 +40,7 @@ public class LocalMatchDataRepo : IMatchDataRepo
 
     public async Task<IEnumerable<Teams>> GetTeams(Gender gender)
     {
-        string filePath;
-        filePath = string.Concat(PATH, gender.ToString());
+        var filePath = string.Concat(PATH, gender.ToString());
 
         try
         {
@@ -99,7 +98,7 @@ public class LocalMatchDataRepo : IMatchDataRepo
                             players.AddRange(match.HomeTeamStatistics.Substitutes);
                         }
 
-                        break; // Found players for this team
+                        break;
                     }
 
                     // Check away team
@@ -112,17 +111,38 @@ public class LocalMatchDataRepo : IMatchDataRepo
                             players.AddRange(match.AwayTeamStatistics.Substitutes);
                         }
 
-                        break; // Found players for this team
+                        break;
                     }
                 }
             }
 
-            // Remove duplicates based on player name
+            // Remove duplicates
             return players.GroupBy(p => p.Name).Select(g => g.First()).ToList();
         }
         catch (Exception ex)
         {
             throw new InvalidOperationException($"Failed to load players for team {fifaCode}: {ex.Message}", ex);
+        }
+    }
+    public async Task<Results> GetTeamStats(Gender gender, string fifaCode)
+    {
+        try
+        {
+            var resultsPath = Path.Combine(PATH, gender.ToString(), "results.json");
+
+            if (!File.Exists(resultsPath))
+            {
+                throw new FileNotFoundException($"Matches data file not found at: {resultsPath}");
+            }
+
+            var jsonContent = await File.ReadAllTextAsync(resultsPath);
+            var allResults = JsonSerializer.Deserialize<List<Results>>(jsonContent);
+
+            return allResults?.FirstOrDefault(r => r.FifaCode.Equals(fifaCode, StringComparison.OrdinalIgnoreCase));
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException($"Failed to load stats for team {fifaCode}: {ex.Message}", ex);
         }
     }
 }

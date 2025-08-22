@@ -2,8 +2,8 @@
 
 public class ImagesRepo : IImagesRepo
 {
-    private const string IMAGES_FOLDER_PATH = @"UserData\Images";
-    private const string DEFAULT_IMAGE_PATH = @"Images\Avatar.png";
+    private const string IMAGES_FOLDER_PATH = @"..\..\..\..\WorldCupData\UserData\Images";
+    private const string DEFAULT_IMAGE_PATH = @"..\..\..\..\WorldCupData\Images\Avatar.png";
 
     public async Task<string> UploadImageAsync(byte[] imageData, string fileName)
     {
