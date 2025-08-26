@@ -33,14 +33,12 @@ namespace WorldCupWPF.Windows
             lblPosition.Content = player.Position.ToString();
             lblKapetan.Visibility = player.Captain ? Visibility.Visible : Visibility.Hidden;
 
-            //todo: implement yellow card and goal counter
-            //utakmicu po id bi trebalo hvatati
             LoadImage(player.Name);
             CalcGoalsAndYellowCards();
         }
         private void CalcGoalsAndYellowCards()
         {
-            
+            //todo: implement yellow card and goal counter
         }
 
         private async Task LoadImage(string playerName)

@@ -1,26 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using DAL.Models;
+﻿using DAL.Models;
 using DAL.Models.Enums;
 using DAL.Repository;
-using WorldCupWPF.Model;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows;
+using System.Windows.Controls;
+using WorldCupWPF.Models;
 using WorldCupWPF.UserControls;
-using WorldCupWPF.Windows;
 
 namespace WorldCupWPF.Views
 {
@@ -29,6 +16,11 @@ namespace WorldCupWPF.Views
     /// </summary>
     public partial class MatchSelectPage : Page, INotifyPropertyChanged
     {
+        //public MatchSelectPage()
+        //{
+        //    DataContext = new MatchSelectViewModel();
+        //}
+
         private readonly IMatchDataRepo matchDataRepo = new LocalMatchDataRepo();
         private readonly IUserSettingsRepo userSettingsRepo = new UserSettingsRepo();
         private readonly State state = new();
@@ -58,7 +50,14 @@ namespace WorldCupWPF.Views
         public MatchSelectPage()
         {
             InitializeComponent();
+
+            Loaded += OnMatchSelectPageLoaded;
+
             DataContext = this;
+        }
+
+        private void OnMatchSelectPageLoaded(object sender, RoutedEventArgs e)
+        {
             LoadSettingsAsync();
             LoadTeamsAsync();
         }
@@ -73,8 +72,8 @@ namespace WorldCupWPF.Views
         {
             if (!userSettingsRepo.HasSavedSettings())
             {
-                var settingsWindow = new SettingsWindow(state);
-                settingsWindow.ShowDialog();
+                var settingsPage = new SettingsPage(state);
+                NavigationService?.Navigate(settingsPage);
                 return;
             }
             try
@@ -89,8 +88,8 @@ namespace WorldCupWPF.Views
         {
             if (userSettings is null)
             {
-                var settingsWindow = new SettingsWindow(state);
-                settingsWindow.ShowDialog();
+                var settingsPage = new SettingsPage(state);
+                NavigationService?.Navigate(settingsPage);
                 return;
             }
 
@@ -102,8 +101,8 @@ namespace WorldCupWPF.Views
 
         private void btnSettings_Click(object sender, RoutedEventArgs e)
         {
-            var settingsWindow = new SettingsWindow(state);
-            settingsWindow.ShowDialog();
+            var settingsPage = new SettingsPage(state);
+            NavigationService?.Navigate(settingsPage);
         }
 
         private async Task LoadTeamsAsync()

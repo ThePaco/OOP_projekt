@@ -34,9 +34,7 @@ namespace WorldCupWPF.UserControls
             lblShirtNumber.Content = player.ShirtNumber;
             LoadImage(player.Name);
 
-            // Add click event handler
             this.MouseLeftButtonUp += PlayerCard_MouseLeftButtonUp;
-            // Make the cursor indicate it's clickable
             this.Cursor = Cursors.Hand;
         }
 

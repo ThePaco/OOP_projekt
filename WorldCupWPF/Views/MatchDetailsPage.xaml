@@ -2,8 +2,9 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:WorldCupWPF.Views"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local = "clr-namespace:WorldCupWPF" 
+      xmlns:p = "clr-namespace:WorldCupWPF.Properties"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="MatchDetailsPage">
@@ -23,37 +24,37 @@
 
         <!-- Statistics Description Column -->
         <StackPanel Grid.Row="1" Grid.Column="0" Margin="20">
-            <Label Content="" FontSize="22" FontWeight="Bold" Margin="0,0,0,20"/>
-            <Label Content="Wins:" FontSize="20" Margin="0,5"/>
-            <Label Content="Losses:" FontSize="20" Margin="0,5"/>
-            <Label Content="Draws:" FontSize="20" Margin="0,5"/>
-            <Label Content="Goals Scored:" FontSize="20" Margin="0,5"/>
-            <Label Content="Goals Taken:" FontSize="20" Margin="0,5"/>
-            <Label Content="Goal Difference:" FontSize="20" Margin="0,5"/>
+            <Label Content="{x:Static p:Resources.lblStatistics}" FontSize="22" FontWeight="Bold" Margin="0,0,0,20"/>
+            <Label Content="{x:Static p:Resources.lblWins}" FontSize="20" Margin="0,5"/>
+            <Label Content="{x:Static p:Resources.lblLosses}" FontSize="20" Margin="0,5"/>
+            <Label Content="{x:Static p:Resources.lblDraws}" FontSize="20" Margin="0,5"/>
+            <Label Content="{x:Static p:Resources.lblGoalsScored}" FontSize="20" Margin="0,5"/>
+            <Label Content="{x:Static p:Resources.lblGoalsTaken}" FontSize="20" Margin="0,5"/>
+            <Label Content="{x:Static p:Resources.lblGoalsDiff}" FontSize="20" Margin="0,5"/>
         </StackPanel>
 
         <!-- Home Team Column -->
         <StackPanel Grid.Row="1" Grid.Column="1" Margin="20">
-            <Label x:Name="lblTeam" Content="TeamName" HorizontalAlignment="Center" FontSize="22" FontWeight="Bold" Margin="0,0,0,20"/>
-            <Label x:Name="lblWins" Content="Wins" HorizontalAlignment="Center" Foreground="LawnGreen" FontSize="20" Margin="0,5"/>
-            <Label x:Name="lblLosses" Content="Losses" HorizontalAlignment="Center" Foreground="IndianRed" FontSize="20" Margin="0,5"/>
-            <Label x:Name="lblDraws" Content="Draws" HorizontalAlignment="Center" Foreground="DarkSlateGray" FontSize="20" Margin="0,5"/>
-            <Label x:Name="lblGoalsScored" Content="GoalsScored" HorizontalAlignment="Center" Foreground="LawnGreen" FontSize="20" Margin="0,5"/>
-            <Label x:Name="lblGoalsTaken" Content="GoalsTaken" HorizontalAlignment="Center" Foreground="IndianRed" FontSize="20" Margin="0,5"/>
-            <Label x:Name="lblGoalsDiff" Content="GoalsDiff" HorizontalAlignment="Center" Foreground="MediumPurple" FontSize="20" Margin="0,5"/>
+            <Label Content="{Binding HomeTeamName}" HorizontalAlignment="Center" FontSize="22" FontWeight="Bold" Margin="0,0,0,20"/>
+            <Label Content="{Binding HomeWins}" HorizontalAlignment="Center" Foreground="LawnGreen" FontSize="20" Margin="0,5"/>
+            <Label Content="{Binding HomeLosses}" HorizontalAlignment="Center" Foreground="IndianRed" FontSize="20" Margin="0,5"/>
+            <Label Content="{Binding HomeDraws}" HorizontalAlignment="Center" Foreground="DarkSlateGray" FontSize="20" Margin="0,5"/>
+            <Label Content="{Binding HomeGoalsScored}" HorizontalAlignment="Center" Foreground="LawnGreen" FontSize="20" Margin="0,5"/>
+            <Label Content="{Binding HomeGoalsTaken}" HorizontalAlignment="Center" Foreground="IndianRed" FontSize="20" Margin="0,5"/>
+            <Label Content="{Binding HomeGoalDifference}" HorizontalAlignment="Center" Foreground="MediumPurple" FontSize="20" Margin="0,5"/>
         </StackPanel>
 
         <!-- Opposing Team Column -->
         <StackPanel Grid.Row="1" Grid.Column="2" Margin="20">
-            <Label x:Name="lblTeamOpps" Content="TeamName" HorizontalAlignment="Center" FontSize="22" FontWeight="Bold" Margin="0,0,0,20"/>
-            <Label x:Name="lblWinsOpps" Content="Wins" HorizontalAlignment="Center" Foreground="LawnGreen" FontSize="20" Margin="0,5"/>
-            <Label x:Name="lblLossesOpps" Content="Losses" HorizontalAlignment="Center" Foreground="IndianRed" FontSize="20" Margin="0,5"/>
-            <Label x:Name="lblDrawsOpps" Content="Draws" HorizontalAlignment="Center" Foreground="DarkSlateGray" FontSize="20" Margin="0,5"/>
-            <Label x:Name="lblGoalsScoredOpps" Content="GoalsScored" HorizontalAlignment="Center" Foreground="LawnGreen" FontSize="20" Margin="0,5"/>
-            <Label x:Name="lblGoalsTakenOpps" Content="GoalsTaken" HorizontalAlignment="Center" Foreground="IndianRed" FontSize="20" Margin="0,5"/>
-            <Label x:Name="lblGoalsDiffOpps" Content="GoalsDiff" HorizontalAlignment="Center" Foreground="MediumPurple" FontSize="20" Margin="0,5"/>
+            <Label Content="{Binding OpponentTeamName}" HorizontalAlignment="Center" FontSize="22" FontWeight="Bold" Margin="0,0,0,20"/>
+            <Label Content="{Binding OpponentWins}" HorizontalAlignment="Center" Foreground="LawnGreen" FontSize="20" Margin="0,5"/>
+            <Label Content="{Binding OpponentLosses}" HorizontalAlignment="Center" Foreground="IndianRed" FontSize="20" Margin="0,5"/>
+            <Label Content="{Binding OpponentDraws}" HorizontalAlignment="Center" Foreground="DarkSlateGray" FontSize="20" Margin="0,5"/>
+            <Label Content="{Binding OpponentGoalsScored}" HorizontalAlignment="Center" Foreground="LawnGreen" FontSize="20" Margin="0,5"/>
+            <Label Content="{Binding OpponentGoalsTaken}" HorizontalAlignment="Center" Foreground="IndianRed" FontSize="20" Margin="0,5"/>
+            <Label Content="{Binding OpponentGoalDifference}" HorizontalAlignment="Center" Foreground="MediumPurple" FontSize="20" Margin="0,5"/>
         </StackPanel>
 
-            <Button x:Name="btnReturn" Content="Return to match" Grid.Row="2" Grid.ColumnSpan="3" HorizontalAlignment="Center" Height="40" Width="120" Margin="0,20" Click="btnReturn_Click" />
+        <Button x:Name="btnReturn" Content="{x:Static p:Resources.btnReturnToMatch}" Grid.Row="2" Grid.ColumnSpan="3" HorizontalAlignment="Center" Height="40" Width="120" Margin="0,20" Click="btnReturn_Click" />
     </Grid>
 </Page>

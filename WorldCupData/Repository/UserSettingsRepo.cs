@@ -11,7 +11,7 @@ namespace DAL.Repository;
 public class UserSettingsRepo : IUserSettingsRepo
 {
     private const string SETTINGS_FILE_PATH = @"..\..\..\..\WorldCupData\UserData\Settings.json";
-
+    
     public async Task<UserSettings> GetUserSettingsAsync()
     {
         try

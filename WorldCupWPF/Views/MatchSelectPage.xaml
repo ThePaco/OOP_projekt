@@ -3,7 +3,8 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:WorldCupWPF.Views"
+      xmlns:local = "clr-namespace:WorldCupWPF" 
+      xmlns:p = "clr-namespace:WorldCupWPF.Properties"
       mc:Ignorable="d" 
       d:DesignHeight="720" d:DesignWidth="900"
       Title="MatchSelectPage">
@@ -20,9 +21,9 @@
                   DisplayMemberPath="Country"
                   SelectedValuePath="FifaCode" HorizontalAlignment="Right" Width="167" Height="37" VerticalAlignment="Top" SelectionChanged="cbOpposingTeam_SelectionChanged"/>
         <Label x:Name="lblVS" Content="VS" HorizontalAlignment="Center" Margin="0,88,0,0" VerticalAlignment="Top" FontFamily="Arial Black" FontSize="36"/>
-        <Label x:Name="lbChooseMatch" Content="Choose a match" HorizontalAlignment="Center" Margin="0,58,0,0" VerticalAlignment="Top" FontSize="20"/>
-        <Button x:Name="btnDetails" Content="Match Details" HorizontalAlignment="Center" Margin="0,671,0,0" VerticalAlignment="Top" Height="46" Width="100" FontSize="16" Click="btnDetails_Click"/>
-        <Button x:Name="btnSettings" Content="Settings" HorizontalAlignment="Center" Margin="743,10,0,0" VerticalAlignment="Top" Click="btnSettings_Click"/>
+        <Label x:Name="lblChooseMatch" Content="{x:Static p:Resources.lblChooseMatch}" HorizontalAlignment="Center" Margin="0,58,0,0" VerticalAlignment="Top" FontSize="20"/>
+        <Button x:Name="btnDetails" Content="{x:Static p:Resources.btnMatchDetails}" HorizontalAlignment="Center" Margin="0,671,0,0" VerticalAlignment="Top" Height="46" Width="100" FontSize="16" Click="btnDetails_Click"/>
+        <Button x:Name="btnSettings" Content="{x:Static p:Resources.btnSettings}" HorizontalAlignment="Center" Margin="743,10,0,0" VerticalAlignment="Top" Click="btnSettings_Click"/>
         <Image x:Name="imgField" HorizontalAlignment="Center" Height="526" Margin="0,140,0,0" VerticalAlignment="Top" Width="880" Source="/Views/Field.png"/>
 
         <!-- Player Grid Overlay -->
