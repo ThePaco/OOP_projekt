@@ -51,6 +51,26 @@ public class ImagesRepo : IImagesRepo
         //ovo se ne bi trebalo nikad dogoditi
         throw new InvalidOperationException($"No '{fileName}' nor default image found. Directory error. Check the file paths in DAL");
     }
+    public async Task<string> GetImagePathAsync(string fileName)
+    {
+        var exeDir = AppDomain.CurrentDomain.BaseDirectory;
+        var relativePath = Path.Combine(exeDir, IMAGES_FOLDER_PATH);
+        var fullPath = Path.GetFullPath(relativePath);
+
+        var pngFilePath = Path.Combine(fullPath, fileName + ".png");
+        var jpgFilePath = Path.Combine(fullPath, fileName + ".jpg");
+
+        if (File.Exists(pngFilePath))
+        {
+            return pngFilePath;
+        }
+
+        if (File.Exists(jpgFilePath))
+            return jpgFilePath;
+        
+        return Path.Combine(fullPath, "Avatar.png");
+
+    }
 
     public async Task RemoveImageAsync(string fileName)
     {

@@ -5,10 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WorldCupWPF.Windows"
         mc:Ignorable="d"
-        Title="PlayerDetailsWindow" Height="400" Width="300">
-    
+        Title="PlayerDetailsWindow" Height="400" Width="300" ResizeMode="CanMinimize">
+
     <Window.Resources>
-        <!-- Shared animation style that can be applied to any FrameworkElement -->
         <Style x:Key="FlyInStyle" TargetType="FrameworkElement">
             <Style.Triggers>
                 <EventTrigger RoutedEvent="Loaded">
@@ -26,45 +25,45 @@
             </Style.Triggers>
         </Style>
     </Window.Resources>
-    
+
     <Grid>
-        <Label x:Name="lblName" HorizontalAlignment="Center" Margin="0,132,0,0" VerticalAlignment="Top" FontSize="16" Content="Ime"
+        <Label x:Name="lblName" HorizontalAlignment="Center" Margin="0,132,0,0" VerticalAlignment="Top" FontSize="16" Content="{Binding Player.Name}"
                Style="{StaticResource FlyInStyle}">
             <Label.RenderTransform>
                 <TranslateTransform/>
             </Label.RenderTransform>
         </Label>
-        <Label x:Name="lblKapetan" HorizontalAlignment="Left" Margin="174,132,0,0" VerticalAlignment="Top" FontSize="16" Content="⭐" Visibility="Hidden"
+        <Label x:Name="lblKapetan" HorizontalAlignment="Left" Margin="199,129,0,0" VerticalAlignment="Top" FontSize="16" Content="{Binding CaptainStar}"
+               Style="{StaticResource FlyInStyle}" Height="16" Width="16">
+            <Label.RenderTransform>
+                <TranslateTransform/>
+            </Label.RenderTransform>
+        </Label>
+        <Label x:Name="lblShirtNumber" HorizontalAlignment="Center" Margin="0,161,0,0" VerticalAlignment="Top" FontSize="16" Content="{Binding Player.ShirtNumber}"
                Style="{StaticResource FlyInStyle}">
             <Label.RenderTransform>
                 <TranslateTransform/>
             </Label.RenderTransform>
         </Label>
-        <Label x:Name="lblShirtNumber" HorizontalAlignment="Center" Margin="0,161,0,0" VerticalAlignment="Top" FontSize="16" Content="Broj"
+        <Label x:Name="lblPosition" HorizontalAlignment="Center" Margin="0,192,0,0" VerticalAlignment="Top" FontSize="16" Content="{Binding Player.Position}" 
                Style="{StaticResource FlyInStyle}">
             <Label.RenderTransform>
                 <TranslateTransform/>
             </Label.RenderTransform>
         </Label>
-        <Label x:Name="lblPosition" HorizontalAlignment="Center" Margin="0,192,0,0" VerticalAlignment="Top" FontSize="16" Content="Pozicija"
+        <Label x:Name="lblGoals" HorizontalAlignment="Center" Margin="0,223,0,0" VerticalAlignment="Top" FontSize="16" Content="{Binding Goals}"
                Style="{StaticResource FlyInStyle}">
             <Label.RenderTransform>
                 <TranslateTransform/>
             </Label.RenderTransform>
         </Label>
-        <Label x:Name="lblGoals" HorizontalAlignment="Center" Margin="0,223,0,0" VerticalAlignment="Top" FontSize="16" Content="Golovi 🥅"
+        <Label x:Name="lblYellow" HorizontalAlignment="Center" Margin="0,254,0,0" VerticalAlignment="Top" FontSize="16" Content="{Binding YellowCards}"
                Style="{StaticResource FlyInStyle}">
             <Label.RenderTransform>
                 <TranslateTransform/>
             </Label.RenderTransform>
         </Label>
-        <Label x:Name="lblYellow" HorizontalAlignment="Center" Margin="0,254,0,0" VerticalAlignment="Top" FontSize="16" Content="Zuti 🟨"
-               Style="{StaticResource FlyInStyle}">
-            <Label.RenderTransform>
-                <TranslateTransform/>
-            </Label.RenderTransform>
-        </Label>
-        <Image x:Name="imgIcon" HorizontalAlignment="Left" Height="100" Margin="98,29,0,0" VerticalAlignment="Top" Width="100"
+        <Image x:Name="imgIcon" HorizontalAlignment="Left" Height="100" Margin="105,29,0,0" VerticalAlignment="Top" Width="100" Source="{Binding ImagePath}"
                Style="{StaticResource FlyInStyle}">
             <Image.RenderTransform>
                 <TranslateTransform/>
@@ -76,5 +75,8 @@
                 <TranslateTransform/>
             </Button.RenderTransform>
         </Button>
+        <Label Content="#" HorizontalAlignment="Left" Margin="176,161,0,0" VerticalAlignment="Top"/>
+        <Label Content="🥅" HorizontalAlignment="Left" Margin="171,223,0,0" VerticalAlignment="Top"/>
+        <Label Content="🟨" HorizontalAlignment="Left" Margin="175,254,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>
