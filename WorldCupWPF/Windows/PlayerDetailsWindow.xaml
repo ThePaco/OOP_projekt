@@ -34,7 +34,7 @@
             </Label.RenderTransform>
         </Label>
         <Label x:Name="lblKapetan" HorizontalAlignment="Left" Margin="199,129,0,0" VerticalAlignment="Top" FontSize="16" Content="{Binding CaptainStar}"
-               Style="{StaticResource FlyInStyle}" Height="16" Width="16">
+               Style="{StaticResource FlyInStyle}">
             <Label.RenderTransform>
                 <TranslateTransform/>
             </Label.RenderTransform>

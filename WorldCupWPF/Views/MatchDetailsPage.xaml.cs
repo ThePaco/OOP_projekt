@@ -15,7 +15,9 @@ namespace WorldCupWPF.Views
         {
             InitializeComponent();
             DataContext = new MatchDetailsViewModel(state, homeTeam, opTeam);
-            //System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("hr-HR");
+            System.Threading.Thread.CurrentThread.CurrentUICulture = state.Language == DAL.Models.Enums.Language.English ?
+                                                                         new System.Globalization.CultureInfo("en-US") :
+                                                                         new System.Globalization.CultureInfo("hr-HR");
         }
 
         private void btnReturn_Click(object sender, RoutedEventArgs e) => NavigationService?.GoBack();

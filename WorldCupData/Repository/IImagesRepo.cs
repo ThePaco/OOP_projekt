@@ -4,6 +4,6 @@ public interface IImagesRepo
 {
     Task<string> UploadImageAsync(byte[] imageData, string fileName);
     Task<byte[]> GetImageAsync(string fileName);
-    Task<string> GetImagePathAsync(string fileName);
+    string GetImagePath(string fileName);
     Task RemoveImageAsync(string fileName);
 }

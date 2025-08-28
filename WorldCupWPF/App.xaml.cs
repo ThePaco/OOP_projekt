@@ -6,6 +6,5 @@ namespace WorldCupWPF;
 /// </summary>
 public partial class App : Application
 {
-    //todo read state and set culture logic
 }
 

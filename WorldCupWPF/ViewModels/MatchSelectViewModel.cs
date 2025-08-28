@@ -3,8 +3,10 @@ using DAL.Models.Enums;
 using DAL.Repository;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 using WorldCupWPF.Commands;
 using WorldCupWPF.Models;
 
@@ -16,13 +18,13 @@ public class MatchSelectViewModel : BaseViewModel
     private readonly IUserSettingsRepo userSettingsRepo;
     private readonly State state;
     public State State => state;
+    public int MatchId { get; set; }
 
     private string vsLabelContent = "VS";
     private bool isInitialized;
 
     private ObservableCollection<Teams> teams = [];
     private ObservableCollection<Teams> opposingTeams = [];
-
     private ObservableCollection<StartingEleven> homeGoaliePlayers = [];
     private ObservableCollection<StartingEleven> homeDefenderPlayers = [];
     private ObservableCollection<StartingEleven> homeMidfieldPlayers = [];
@@ -34,6 +36,7 @@ public class MatchSelectViewModel : BaseViewModel
 
     public MatchSelectViewModel() : this(new LocalMatchDataRepo(), new UserSettingsRepo(), new State())
     {
+
     }
 
     public MatchSelectViewModel(IMatchDataRepo matchDataRepo, IUserSettingsRepo userSettingsRepo, State state)
@@ -46,23 +49,8 @@ public class MatchSelectViewModel : BaseViewModel
 
         NavigateToSettingsCommand = new RelayCommand(() => NavigateToSettingsRequested?.Invoke(this, EventArgs.Empty));
 
-        // ma šta
-        //NavigateToDetailsCommand = new RelayCommand(NavigateToDetailsRequested?.Invoke(this,
-        //                                                                              new NavigateToDetailsEventArgs(SelectedHomeTeam, SelectedOpposingTeam)
-        //                                                                              ),
-        //                                            () => SelectedHomeTeam is not null && SelectedOpposingTeam is not null);
-
-        NavigateToDetailsCommand = new RelayCommand(
-            () =>
-            {
-                if (SelectedHomeTeam is not null && SelectedOpposingTeam is not null)
-                {
-                    NavigateToDetailsRequested?.Invoke(this,
-                        new NavigateToDetailsEventArgs(SelectedHomeTeam, SelectedOpposingTeam));
-                }
-            },
-            () => SelectedHomeTeam is not null && SelectedOpposingTeam is not null
-        );
+        NavigateToDetailsCommand = new RelayCommand(() => NavigateToDetailsRequested?.Invoke(this, new NavigateToDetailsEventArgs(SelectedHomeTeam!, SelectedOpposingTeam!)),
+                                                    () => SelectedHomeTeam is not null && SelectedOpposingTeam is not null);
     }
 
     public ObservableCollection<Teams> Teams
@@ -85,9 +73,33 @@ public class MatchSelectViewModel : BaseViewModel
         }
     }
 
-    public Teams? SelectedHomeTeam { get; set; }
+    private Teams? selectedHomeTeam;
 
-    public Teams? SelectedOpposingTeam { get; set; }
+    public Teams? SelectedHomeTeam
+    {
+        get => selectedHomeTeam;
+        set
+        {
+            selectedHomeTeam = value;
+            Task.Run(async () => await LoadOpponentsAsync());
+        }
+    }
+
+    private Teams? selectedOpposingTeam;
+
+    public Teams? SelectedOpposingTeam
+    {
+        get => selectedOpposingTeam;
+        set
+        {
+            selectedOpposingTeam = value;
+            Task.Run(async () =>
+            {
+                await UpdateMatchInfoAsync();
+                await LoadPlayersAsync();
+            });
+        }
+    }
 
     public string VsLabelContent
     {
@@ -159,20 +171,6 @@ public class MatchSelectViewModel : BaseViewModel
         if (isInitialized)
             return;
 
-        //todo
-        //
-        //if (userSettingsRepo.HasSavedSettings())
-        //{
-        //    var lang = userSettingsRepo.GetUserSettingsAsync().Result;
-        //    CultureInfo.DefaultThreadCurrentUICulture = lang.Language == DAL.Models.Enums.Language.Croatian
-        //                                                    ? new CultureInfo("hr-HR")
-        //                                                    : new CultureInfo("en-US");
-        //}
-        //else
-        //{
-        //    Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
-        //}
-
         try
         {
             var hasSettings = await LoadSettingsAsync();
@@ -180,6 +178,8 @@ public class MatchSelectViewModel : BaseViewModel
             {
                 await LoadTeamsAsync();
                 isInitialized = true;
+
+                SelectedHomeTeam = teams[0];
             }
         }
         catch (Exception ex)
@@ -213,7 +213,7 @@ public class MatchSelectViewModel : BaseViewModel
         }
     }
 
-    private bool ApplySettingsToState(DAL.Models.UserSettings? userSettings)
+    private bool ApplySettingsToState(UserSettings? userSettings)
     {
         if (userSettings is null)
             return false;
@@ -238,19 +238,7 @@ public class MatchSelectViewModel : BaseViewModel
             MessageBox.Show($"Failed to load teams: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
-
-    public async void OnHomeTeamSelectionChanged()
-    {
-        await LoadOpponentsAsync();
-        await LoadPlayersAsync();
-    }
-
-    public async void OnOpposingTeamSelectionChanged()
-    {
-        await UpdateMatchInfoAsync();
-        await LoadPlayersAsync();
-    }
-
+    
     private async Task LoadOpponentsAsync()
     {
         if (SelectedHomeTeam is null)
@@ -305,6 +293,8 @@ public class MatchSelectViewModel : BaseViewModel
                 VsLabelContent = match.HomeTeam.Code == SelectedHomeTeam.FifaCode
                     ? $"{match.HomeTeam.Goals}:{match.AwayTeam.Goals}"
                     : $"{match.AwayTeam.Goals}:{match.HomeTeam.Goals}";
+
+                MatchId = (int)match.FifaId;
             }
             else
             {
@@ -337,7 +327,8 @@ public class MatchSelectViewModel : BaseViewModel
 
             if (match != null)
             {
-                await LoadPlayersForMatchAsync(match);
+                Application.Current.Dispatcher.Invoke(() => LoadPlayersForMatch(match));
+                //LoadPlayersForMatch(match);
             }
             else
             {
@@ -350,7 +341,7 @@ public class MatchSelectViewModel : BaseViewModel
         }
     }
 
-    private async Task LoadPlayersForMatchAsync(DAL.Models.Matches match)
+    private void LoadPlayersForMatch(Matches match)
     {
         ClearPlayerPositions();
 

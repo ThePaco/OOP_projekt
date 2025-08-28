@@ -1,6 +1,7 @@
 ﻿using DAL.Repository;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using WorldCupWPF.Models;
 using WorldCupWPF.ViewModels;
 
@@ -19,10 +20,42 @@ namespace WorldCupWPF.Views
         {
             this.state = state;
             InitializeComponent();
+
             viewModel = new SettingsViewModel(state, new UserSettingsRepo());
             DataContext = viewModel;
 
+            System.Threading.Thread.CurrentThread.CurrentUICulture = state.Language == DAL.Models.Enums.Language.English ?
+                                                                         new System.Globalization.CultureInfo("en-US") :
+                                                                         new System.Globalization.CultureInfo("hr-HR");
+
             viewModel.ExitRequested += (_, e) => OnCancelRequested(e);
+
+            this.Focusable = true;
+            this.KeyDown += SettingsPage_KeyDown;
+            this.Loaded += SettingsPage_Loaded;
+        }
+        private void SettingsPage_Loaded(object sender, RoutedEventArgs e) => this.Focus();
+
+        private void SettingsPage_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.Escape:
+                    if (viewModel.CancelCommand.CanExecute(null))
+                    {
+                        viewModel.CancelCommand.Execute(null);
+                    }
+                    e.Handled = true;
+                    break;
+
+                case Key.Enter:
+                    if (viewModel.SaveCommand.CanExecute(null))
+                    {
+                        viewModel.SaveCommand.Execute(null);
+                    }
+                    e.Handled = true;
+                    break;
+            }
         }
 
         private void OnCancelRequested(bool shouldNavigateToMatchSelect)
@@ -30,7 +63,7 @@ namespace WorldCupWPF.Views
             if (shouldNavigateToMatchSelect)
             {
                 SetResolution();
-                NavigationService?.Navigate(new MatchSelectPage());
+                NavigationService?.Navigate(new MatchSelectPage(state));
             }
             else
             {

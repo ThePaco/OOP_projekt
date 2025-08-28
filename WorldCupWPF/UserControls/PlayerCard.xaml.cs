@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using DAL.Models;
+using DAL.Models.Enums;
 using DAL.Repository;
 using WorldCupWPF.Windows;
 
@@ -15,11 +16,16 @@ namespace WorldCupWPF.UserControls
     {
         private readonly IImagesRepo imageRepo = new ImagesRepo();
         private readonly StartingEleven player;
+        private readonly Gender gender;
+        private readonly int matchId;
 
-        public PlayerCard(StartingEleven player)
+
+        public PlayerCard(StartingEleven player, Gender gender, int matchId)
         {
             InitializeComponent();
             this.player = player;
+            this.gender = gender;
+            this.matchId = matchId;
             lblName.Content = player.Name;
             lblShirtNumber.Content = player.ShirtNumber;
             LoadImage(player.Name);
@@ -30,7 +36,7 @@ namespace WorldCupWPF.UserControls
 
         private void PlayerCard_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            var playerDetailsWindow = new PlayerDetailsWindow(player);
+            var playerDetailsWindow = new PlayerDetailsWindow(player, gender, matchId);
             playerDetailsWindow.ShowDialog();
         }
 

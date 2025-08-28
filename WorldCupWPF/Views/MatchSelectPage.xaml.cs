@@ -21,6 +21,9 @@ namespace WorldCupWPF.Views
             DataContext = viewModel;
             viewModel.InitializeAsync();
 
+            //todo
+            //System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("hr-HR");
+
             //navigation events subs
             viewModel.NavigateToSettingsRequested += OnNavigateToSettings;
             viewModel.NavigateToDetailsRequested += OnNavigateToDetails;
@@ -30,7 +33,6 @@ namespace WorldCupWPF.Views
             ViewModel.HomeDefenderPlayers.CollectionChanged += (s, e) => UpdatePlayerPositions(HomeDefenderPositions, ViewModel.HomeDefenderPlayers);
             ViewModel.HomeMidfieldPlayers.CollectionChanged += (s, e) => UpdatePlayerPositions(HomeMidfieldPositions, ViewModel.HomeMidfieldPlayers);
             ViewModel.HomeForwardPlayers.CollectionChanged += (s, e) => UpdatePlayerPositions(HomeForwardPositions, ViewModel.HomeForwardPlayers);
-
             ViewModel.OpposingGoaliePlayers.CollectionChanged += (s, e) => UpdatePlayerPositions(OpposingGoaliePositions, ViewModel.OpposingGoaliePlayers);
             ViewModel.OpposingDefenderPlayers.CollectionChanged += (s, e) => UpdatePlayerPositions(OpposingDefenderPositions, ViewModel.OpposingDefenderPlayers);
             ViewModel.OpposingMidfieldPlayers.CollectionChanged += (s, e) => UpdatePlayerPositions(OpposingMidfieldPositions, ViewModel.OpposingMidfieldPlayers);
@@ -39,7 +41,9 @@ namespace WorldCupWPF.Views
 
         public MatchSelectPage(State state) : this()
         {
-
+            System.Threading.Thread.CurrentThread.CurrentUICulture = state.Language == DAL.Models.Enums.Language.English ?
+                                                                         new System.Globalization.CultureInfo("en-US") :
+                                                                         new System.Globalization.CultureInfo("hr-HR");
         }
 
         private void UpdatePlayerPositions(StackPanel stackPanel, System.Collections.ObjectModel.ObservableCollection<StartingEleven> players)
@@ -48,7 +52,7 @@ namespace WorldCupWPF.Views
 
             foreach (var player in players)
             {
-                var playerCard = new PlayerCard(player);
+                var playerCard = new PlayerCard(player, ViewModel.State.Gender, ViewModel.MatchId);
                 stackPanel.Children.Add(playerCard);
             }
         }
@@ -65,14 +69,14 @@ namespace WorldCupWPF.Views
             NavigationService?.Navigate(matchDetailsPage);
         }
 
-        private void cbHomeTeam_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            (DataContext as MatchSelectViewModel)?.OnHomeTeamSelectionChanged();
-        }
+        //private void cbHomeTeam_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    (DataContext as MatchSelectViewModel)?.OnHomeTeamSelectionChanged();
+        //}
 
-        private void cbOppTeam_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            (DataContext as MatchSelectViewModel)?.OnOpposingTeamSelectionChanged();
-        }
+        //private void cbOppTeam_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    (DataContext as MatchSelectViewModel)?.OnOpposingTeamSelectionChanged();
+        //}
     }
 }

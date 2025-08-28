@@ -9,6 +9,7 @@ namespace WorldCupWPF.Models
         public Language Language { get; set; }
         public Resolution Resolution { get; set; }
         public string? FifaCode { get; set; }
+        public string? PlayerName { get; set; }
     }
 
     public static class Mapper
