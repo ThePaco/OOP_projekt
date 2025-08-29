@@ -88,7 +88,7 @@ public class LocalMatchDataRepo : IMatchDataRepo
             {
                 foreach (var match in matches)
                 {
-                    // Check home team
+                    // home team
                     if (match.HomeTeam?.Code?.Equals(fifaCode, StringComparison.OrdinalIgnoreCase) == true &&
                         match.HomeTeamStatistics?.StartingEleven != null)
                     {
@@ -101,7 +101,7 @@ public class LocalMatchDataRepo : IMatchDataRepo
                         break;
                     }
 
-                    // Check away team
+                    // away team
                     if (match.AwayTeam?.Code?.Equals(fifaCode, StringComparison.OrdinalIgnoreCase) == true &&
                         match.AwayTeamStatistics?.StartingEleven != null)
                     {

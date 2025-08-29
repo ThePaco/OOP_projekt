@@ -21,7 +21,7 @@ namespace WorldCupWPF.Views
             DataContext = viewModel;
             viewModel.InitializeAsync();
 
-            //todo
+            //handled elsewhere now
             //System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("hr-HR");
 
             //navigation events subs

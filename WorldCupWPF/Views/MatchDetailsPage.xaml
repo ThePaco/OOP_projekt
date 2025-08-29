@@ -22,7 +22,6 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Statistics Description Column -->
         <StackPanel Grid.Row="1" Grid.Column="0" Margin="20">
             <Label Content="{x:Static p:Resources.lblStatistics}" FontSize="22" FontWeight="Bold" Margin="0,0,0,20"/>
             <Label Content="{x:Static p:Resources.lblWins}" FontSize="20" Margin="0,5"/>
@@ -33,7 +32,6 @@
             <Label Content="{x:Static p:Resources.lblGoalsDiff}" FontSize="20" Margin="0,5"/>
         </StackPanel>
 
-        <!-- Home Team Column -->
         <StackPanel Grid.Row="1" Grid.Column="1" Margin="20">
             <Label Content="{Binding HomeTeamName}" HorizontalAlignment="Center" FontSize="22" FontWeight="Bold" Margin="0,0,0,20"/>
             <Label Content="{Binding HomeWins}" HorizontalAlignment="Center" Foreground="LawnGreen" FontSize="20" Margin="0,5"/>
@@ -44,7 +42,6 @@
             <Label Content="{Binding HomeGoalDifference}" HorizontalAlignment="Center" Foreground="MediumPurple" FontSize="20" Margin="0,5"/>
         </StackPanel>
 
-        <!-- Opposing Team Column -->
         <StackPanel Grid.Row="1" Grid.Column="2" Margin="20">
             <Label Content="{Binding OpponentTeamName}" HorizontalAlignment="Center" FontSize="22" FontWeight="Bold" Margin="0,0,0,20"/>
             <Label Content="{Binding OpponentWins}" HorizontalAlignment="Center" Foreground="LawnGreen" FontSize="20" Margin="0,5"/>

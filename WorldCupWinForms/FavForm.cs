@@ -157,7 +157,6 @@ public partial class FavForm : Form
 
         if (cmbTeams.Items.Count > 0)
         {
-            //todo select team from favourites here
             cmbTeams.SelectedIndex = 0;
         }
     }
@@ -443,7 +442,7 @@ public partial class FavForm : Form
         {
             if (ModifierKeys.HasFlag(Keys.Control))
             {
-                //TODO HandleMultiSelection(player);
+                //TODO snippet HandleMultiSelection(player);
             }
             else
             {
@@ -592,8 +591,6 @@ public partial class FavForm : Form
 
     private void AddToFavorites(StartingEleven player)
     {
-        // todo try catch
-
         if (favoritePlayersList.Count >= 3)
         {
             MessageBox.Show($"{resourceManager.GetString("Max_three_fav_players")}", 
@@ -665,7 +662,6 @@ public partial class FavForm : Form
 
     private async void cmbTeams_SelectedIndexChanged_1(object sender, EventArgs e)
     {
-        // todo try catch
         selectedPlayers.Clear();
         await RefreshTeamPlayersPanelAsync();
     }
@@ -685,7 +681,6 @@ public partial class FavForm : Form
 
     private async void btnSettings_Click(object sender, EventArgs e)
     {
-        // todo try catch
         var settingsForm = new SettingsForm(state);
         var result = settingsForm.ShowDialog();
 
